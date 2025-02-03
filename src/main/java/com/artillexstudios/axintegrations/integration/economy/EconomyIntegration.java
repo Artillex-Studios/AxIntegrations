@@ -7,13 +7,13 @@ import java.util.concurrent.CompletableFuture;
 
 public interface EconomyIntegration extends Integration {
 
-    public abstract CompletableFuture<Boolean> give(OfflinePlayer player, double amount);
+    CompletableFuture<Boolean> give(OfflinePlayer player, double amount);
 
-    public abstract CompletableFuture<Boolean> has(OfflinePlayer offlinePlayer, double amount);
+    CompletableFuture<Boolean> has(OfflinePlayer offlinePlayer, double amount);
 
-    public abstract CompletableFuture<Double> balance(OfflinePlayer offlinePlayer);
+    CompletableFuture<Double> balance(OfflinePlayer offlinePlayer);
 
-    public CompletableFuture<Boolean> take(OfflinePlayer player, double amount) {
+    default CompletableFuture<Boolean> take(OfflinePlayer player, double amount) {
         return this.give(player, -amount);
     }
 }

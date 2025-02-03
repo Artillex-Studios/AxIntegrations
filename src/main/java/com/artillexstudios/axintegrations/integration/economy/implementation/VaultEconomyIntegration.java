@@ -9,17 +9,12 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-public final class VaultEconomyIntegration extends EconomyIntegration {
+public final class VaultEconomyIntegration implements EconomyIntegration {
     private final Economy economy;
 
     public VaultEconomyIntegration() {
         RegisteredServiceProvider<Economy> provider = Bukkit.getServicesManager().getRegistration(Economy.class);
-        if (provider == null) {
-            this.economy = null;
-        } else {
-            this.loaded = true;
-            this.economy = provider.getProvider();
-        }
+        this.economy = provider.getProvider();
     }
 
     @Override
@@ -35,6 +30,11 @@ public final class VaultEconomyIntegration extends EconomyIntegration {
     @Override
     public CompletableFuture<Double> balance(OfflinePlayer offlinePlayer) {
         return CompletableFuture.completedFuture(this.economy.getBalance(offlinePlayer));
+    }
+
+    @Override
+    public CompletableFuture<Boolean> take(OfflinePlayer player, double amount) {
+        return null;
     }
 
     @Override
