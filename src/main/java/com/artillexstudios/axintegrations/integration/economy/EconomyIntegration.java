@@ -5,12 +5,7 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.concurrent.CompletableFuture;
 
-public abstract class EconomyIntegration implements Integration {
-    protected boolean loaded = false;
-
-    public boolean loaded() {
-        return this.loaded;
-    }
+public interface EconomyIntegration extends Integration {
 
     public abstract CompletableFuture<Boolean> give(OfflinePlayer player, double amount);
 
