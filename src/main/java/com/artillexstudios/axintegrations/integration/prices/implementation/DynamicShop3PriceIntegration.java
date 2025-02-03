@@ -1,0 +1,78 @@
+package com.artillexstudios.axintegrations.integration.prices.implementation;
+
+import com.artillexstudios.axintegrations.integration.prices.PriceIntegration;
+import com.artillexstudios.axintegrations.plugin.RequiredPlugin;
+import me.sat7.dynamicshop.DynaShopAPI;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.ItemStack;
+
+public final class DynamicShop3PriceIntegration implements PriceIntegration {
+
+    @Override
+    public Double getPrice(ItemStack itemStack) {
+        double max = -1;
+        for (String shop : DynaShopAPI.getShops()) {
+            max = Math.max(max, DynaShopAPI.getSellPrice(shop, itemStack));
+        }
+
+        if (max == -1) {
+            return max;
+        }
+
+        return max * itemStack.getAmount();
+    }
+
+    @Override
+    public Double getPrice(ItemStack itemStack, long amount) {
+        double max = -1;
+        for (String shop : DynaShopAPI.getShops()) {
+            max = Math.max(max, DynaShopAPI.getSellPrice(shop, itemStack));
+        }
+
+        if (max == -1) {
+            return max;
+        }
+
+        return max * amount;
+    }
+
+    @Override
+    public Double getPrice(ItemStack itemStack, OfflinePlayer player) {
+        double max = -1;
+        for (String shop : DynaShopAPI.getShops()) {
+            max = Math.max(max, DynaShopAPI.getSellPrice(shop, itemStack));
+        }
+
+        if (max == -1) {
+            return max;
+        }
+
+        return max * itemStack.getAmount();
+    }
+
+    @Override
+    public Double getPrice(ItemStack itemStack, long amount, OfflinePlayer player) {
+        double max = -1;
+        for (String shop : DynaShopAPI.getShops()) {
+            max = Math.max(max, DynaShopAPI.getSellPrice(shop, itemStack));
+        }
+
+        if (max == -1) {
+            return max;
+        }
+
+        return max * amount;
+    }
+
+    @Override
+    public RequiredPlugin[] requiredPlugins() {
+        return new RequiredPlugin[]{
+                RequiredPlugin.of("DynamicShop")
+        };
+    }
+
+    @Override
+    public String id() {
+        return "dynamicshop3";
+    }
+}
