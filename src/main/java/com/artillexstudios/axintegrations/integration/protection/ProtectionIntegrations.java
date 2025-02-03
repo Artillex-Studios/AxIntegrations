@@ -6,9 +6,13 @@ import com.artillexstudios.axintegrations.integration.protection.implementation.
 import com.artillexstudios.axintegrations.integration.protection.implementation.HuskTownsProtectionIntegration;
 import com.artillexstudios.axintegrations.integration.protection.implementation.IridiumSkyBlockProtectionIntegration;
 import com.artillexstudios.axintegrations.integration.protection.implementation.KingdomsXProtectionIntegration;
+import com.artillexstudios.axintegrations.integration.protection.implementation.LandsProtectionIntegration;
 import com.artillexstudios.axintegrations.integration.protection.implementation.LocketteProProtectionIntegration;
+import com.artillexstudios.axintegrations.integration.protection.implementation.PlotSquaredProtectionIntegration;
 import com.artillexstudios.axintegrations.integration.protection.implementation.ResidenceProtectionIntegration;
+import com.artillexstudios.axintegrations.integration.protection.implementation.SaberFactionsProtectionIntegration;
 import com.artillexstudios.axintegrations.integration.protection.implementation.SuperiorSkyBlock2ProtectionIntegration;
+import com.artillexstudios.axintegrations.integration.protection.implementation.TownyProtectionIntegration;
 import com.artillexstudios.axintegrations.integration.protection.implementation.WorldGuardProtectionIntegration;
 import com.artillexstudios.axintegrations.registry.IntegrationRegistry;
 
@@ -22,6 +26,7 @@ public final class ProtectionIntegrations {
         register(IridiumSkyBlockProtectionIntegration::new);
         register(KingdomsXProtectionIntegration::new);
         register(LocketteProProtectionIntegration::new);
+        register(PlotSquaredProtectionIntegration::new);
         register(ResidenceProtectionIntegration::new);
         register(WorldGuardProtectionIntegration::new);
         register(SuperiorSkyBlock2ProtectionIntegration::new);
@@ -29,6 +34,9 @@ public final class ProtectionIntegrations {
         register(HuskTownsProtectionIntegration::new);
         register(HuskClaimsProtectionIntegration::new);
         register(BentoBoxProtectionIntegration::new);
+        register(LandsProtectionIntegration::new);
+        register(TownyProtectionIntegration::new);
+        register(SaberFactionsProtectionIntegration::new);
     }
 
     public static Collection<ProtectionIntegration> values() {

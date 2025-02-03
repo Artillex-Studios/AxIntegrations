@@ -10,7 +10,9 @@ public final class ShopGUIPlusPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack) {
-        return ShopGuiPlusApi.getItemStackPriceSell(itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        return ShopGuiPlusApi.getItemStackPriceSell(copy) * itemStack.getAmount();
     }
 
     @Override
@@ -22,7 +24,9 @@ public final class ShopGUIPlusPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, OfflinePlayer player) {
-        return ShopGuiPlusApi.getItemStackPriceSell(player.getPlayer(), itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        return ShopGuiPlusApi.getItemStackPriceSell(player.getPlayer(), copy) * itemStack.getAmount();
     }
 
     @Override

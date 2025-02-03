@@ -18,7 +18,9 @@ public final class EssentialsPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack) {
-        BigDecimal price = this.essentials.getWorth().getPrice(this.essentials, itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        BigDecimal price = this.essentials.getWorth().getPrice(this.essentials, copy);
         if (price == null) {
             return null;
         }
@@ -28,7 +30,9 @@ public final class EssentialsPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount) {
-        BigDecimal price = this.essentials.getWorth().getPrice(this.essentials, itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        BigDecimal price = this.essentials.getWorth().getPrice(this.essentials, copy);
         if (price == null) {
             return null;
         }
@@ -38,7 +42,9 @@ public final class EssentialsPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, OfflinePlayer player) {
-        BigDecimal price = this.essentials.getWorth().getPrice(this.essentials, itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        BigDecimal price = this.essentials.getWorth().getPrice(this.essentials, copy);
         if (price == null) {
             return null;
         }
@@ -48,7 +54,9 @@ public final class EssentialsPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount, OfflinePlayer player) {
-        BigDecimal price = this.essentials.getWorth().getPrice(this.essentials, itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        BigDecimal price = this.essentials.getWorth().getPrice(this.essentials, copy);
         if (price == null) {
             return null;
         }

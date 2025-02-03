@@ -5,14 +5,16 @@ import com.artillexstudios.axintegrations.plugin.RequiredPlugin;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import su.nightexpress.nexshop.ShopAPI;
-import su.nightexpress.nexshop.api.shop.product.VirtualProduct;
 import su.nightexpress.nexshop.api.shop.type.TradeType;
+import su.nightexpress.nexshop.shop.virtual.impl.VirtualProduct;
 
 public final class ExcellentShopPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack) {
-        VirtualProduct product = ShopAPI.getVirtualShop().getBestProductFor(itemStack, TradeType.SELL);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        VirtualProduct product = ShopAPI.getVirtualShop().getBestProductFor(copy, TradeType.SELL);
         if (product == null || !product.isSellable()) {
             return null;
         }
@@ -22,7 +24,9 @@ public final class ExcellentShopPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount) {
-        VirtualProduct product = ShopAPI.getVirtualShop().getBestProductFor(itemStack, TradeType.SELL);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        VirtualProduct product = ShopAPI.getVirtualShop().getBestProductFor(copy, TradeType.SELL);
         if (product == null || !product.isSellable()) {
             return null;
         }
@@ -32,7 +36,9 @@ public final class ExcellentShopPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, OfflinePlayer player) {
-        VirtualProduct product = ShopAPI.getVirtualShop().getBestProductFor(itemStack, TradeType.SELL, player.getPlayer());
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        VirtualProduct product = ShopAPI.getVirtualShop().getBestProductFor(copy, TradeType.SELL, player.getPlayer());
         if (product == null || !product.isSellable()) {
             return null;
         }
@@ -42,7 +48,9 @@ public final class ExcellentShopPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount, OfflinePlayer player) {
-        VirtualProduct product = ShopAPI.getVirtualShop().getBestProductFor(itemStack, TradeType.SELL, player.getPlayer());
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        VirtualProduct product = ShopAPI.getVirtualShop().getBestProductFor(copy, TradeType.SELL, player.getPlayer());
         if (product == null || !product.isSellable()) {
             return null;
         }

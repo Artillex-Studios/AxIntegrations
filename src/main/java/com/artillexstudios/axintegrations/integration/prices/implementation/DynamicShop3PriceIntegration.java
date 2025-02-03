@@ -10,9 +10,11 @@ public final class DynamicShop3PriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack) {
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
         double max = -1;
         for (String shop : DynaShopAPI.getShops()) {
-            max = Math.max(max, DynaShopAPI.getSellPrice(shop, itemStack));
+            max = Math.max(max, DynaShopAPI.getSellPrice(shop, copy));
         }
 
         if (max == -1) {
@@ -24,9 +26,11 @@ public final class DynamicShop3PriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount) {
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
         double max = -1;
         for (String shop : DynaShopAPI.getShops()) {
-            max = Math.max(max, DynaShopAPI.getSellPrice(shop, itemStack));
+            max = Math.max(max, DynaShopAPI.getSellPrice(shop, copy));
         }
 
         if (max == -1) {
@@ -38,9 +42,11 @@ public final class DynamicShop3PriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, OfflinePlayer player) {
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
         double max = -1;
         for (String shop : DynaShopAPI.getShops()) {
-            max = Math.max(max, DynaShopAPI.getSellPrice(shop, itemStack));
+            max = Math.max(max, DynaShopAPI.getSellPrice(shop, copy));
         }
 
         if (max == -1) {
@@ -52,9 +58,11 @@ public final class DynamicShop3PriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount, OfflinePlayer player) {
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
         double max = -1;
         for (String shop : DynaShopAPI.getShops()) {
-            max = Math.max(max, DynaShopAPI.getSellPrice(shop, itemStack));
+            max = Math.max(max, DynaShopAPI.getSellPrice(shop, copy));
         }
 
         if (max == -1) {

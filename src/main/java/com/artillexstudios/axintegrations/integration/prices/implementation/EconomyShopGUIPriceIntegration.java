@@ -11,12 +11,14 @@ public final class EconomyShopGUIPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack) {
-        ShopItem shopItem = EconomyShopGUIHook.getShopItem(itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        ShopItem shopItem = EconomyShopGUIHook.getShopItem(copy);
         if (shopItem == null) {
             return null;
         }
 
-        return EconomyShopGUIHook.getItemSellPrice(shopItem, itemStack);
+        return EconomyShopGUIHook.getItemSellPrice(shopItem, copy) * itemStack.getAmount();
     }
 
     @Override
@@ -40,7 +42,7 @@ public final class EconomyShopGUIPriceIntegration implements PriceIntegration {
             return null;
         }
 
-        return EconomyShopGUIHook.getItemSellPrice(shopItem, copy, player.getPlayer());
+        return EconomyShopGUIHook.getItemSellPrice(shopItem, copy, player.getPlayer()) * itemStack.getAmount();
     }
 
     @Override

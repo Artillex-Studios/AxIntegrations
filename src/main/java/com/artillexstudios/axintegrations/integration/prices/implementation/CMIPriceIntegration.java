@@ -16,25 +16,33 @@ public final class CMIPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack) {
-        WorthItem worth = this.cmi.getWorthManager().getWorth(itemStack);
-        return worth.getSellPrice();
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        WorthItem worth = this.cmi.getWorthManager().getWorth(copy);
+        return worth.getSellPrice() * itemStack.getAmount();
     }
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount) {
-        WorthItem worth = this.cmi.getWorthManager().getWorth(itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        WorthItem worth = this.cmi.getWorthManager().getWorth(copy);
         return worth.getSellPrice() * amount;
     }
 
     @Override
     public Double getPrice(ItemStack itemStack, OfflinePlayer player) {
-        WorthItem worth = this.cmi.getWorthManager().getWorth(itemStack);
-        return worth.getSellPrice();
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        WorthItem worth = this.cmi.getWorthManager().getWorth(copy);
+        return worth.getSellPrice() * itemStack.getAmount();
     }
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount, OfflinePlayer player) {
-        WorthItem worth = this.cmi.getWorthManager().getWorth(itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        WorthItem worth = this.cmi.getWorthManager().getWorth(copy);
         return worth.getSellPrice() * amount;
     }
 

@@ -10,22 +10,30 @@ public final class AxGensPriceIntegration implements PriceIntegration {
 
     @Override
     public Double getPrice(ItemStack itemStack) {
-        return AxGensAPI.getPrice(itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        return AxGensAPI.getPrice(copy) * itemStack.getAmount();
     }
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount) {
-        return AxGensAPI.getPrice(itemStack) * amount;
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        return AxGensAPI.getPrice(copy) * amount;
     }
 
     @Override
     public Double getPrice(ItemStack itemStack, OfflinePlayer player) {
-        return AxGensAPI.getPrice(player.getPlayer(), itemStack);
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        return AxGensAPI.getPrice(player.getPlayer(), copy) * itemStack.getAmount();
     }
 
     @Override
     public Double getPrice(ItemStack itemStack, long amount, OfflinePlayer player) {
-        return AxGensAPI.getPrice(player.getPlayer(), itemStack) * amount;
+        ItemStack copy = itemStack.clone();
+        copy.setAmount(1);
+        return AxGensAPI.getPrice(player.getPlayer(), copy) * amount;
     }
 
     @Override
