@@ -6,6 +6,7 @@ import com.artillexstudios.axintegrations.integration.prices.implementation.Dyna
 import com.artillexstudios.axintegrations.integration.prices.implementation.EconomyShopGUIPriceIntegration;
 import com.artillexstudios.axintegrations.integration.prices.implementation.EssentialsPriceIntegration;
 //import com.artillexstudios.axintegrations.integration.prices.implementation.ExcellentShopPriceIntegration;
+import com.artillexstudios.axintegrations.integration.prices.implementation.ExcellentShopPriceIntegration;
 import com.artillexstudios.axintegrations.integration.prices.implementation.ShopGUIPlusPriceIntegration;
 import com.artillexstudios.axintegrations.integration.prices.implementation.ZShopPriceIntegration;
 import com.artillexstudios.axintegrations.registry.IntegrationRegistry;
@@ -22,7 +23,7 @@ public final class PriceIntegrations {
         register(DynamicShop3PriceIntegration::new);
         register(EconomyShopGUIPriceIntegration::new);
         register(EssentialsPriceIntegration::new);
-//        register(ExcellentShopPriceIntegration::new);
+        register(ExcellentShopPriceIntegration::new);
         register(ShopGUIPlusPriceIntegration::new);
         register(ZShopPriceIntegration::new);
     }
@@ -35,7 +36,7 @@ public final class PriceIntegrations {
         PriceIntegration instance;
         try {
             instance = integration.get();
-        } catch (Exception exception) {
+        } catch (Throwable throwable) {
             return;
         }
 

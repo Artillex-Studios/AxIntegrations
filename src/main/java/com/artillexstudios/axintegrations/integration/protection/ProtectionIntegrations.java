@@ -47,7 +47,7 @@ public final class ProtectionIntegrations {
         ProtectionIntegration instance;
         try {
             instance = integration.get();
-        } catch (Exception exception) {
+        } catch (Throwable throwable) {
             return;
         }
 

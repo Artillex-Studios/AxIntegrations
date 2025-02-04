@@ -21,7 +21,7 @@ public final class EconomyIntegrations {
         EconomyIntegration instance;
         try {
             instance = integration.get();
-        } catch (Exception exception) {
+        } catch (Throwable throwable) {
             return;
         }
 
