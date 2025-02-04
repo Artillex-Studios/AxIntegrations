@@ -58,7 +58,7 @@ public final class SuperiorSkyBlock2ProtectionIntegration implements ProtectionI
     @Override
     public RequiredPlugin[] requiredPlugins() {
         return new RequiredPlugin[]{
-                RequiredPlugin.of("SuperiorSkyBlock")
+                RequiredPlugin.of("SuperiorSkyBlock2")
         };
     }
 

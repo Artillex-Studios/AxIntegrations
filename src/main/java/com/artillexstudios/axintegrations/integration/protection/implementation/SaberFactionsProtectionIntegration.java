@@ -51,7 +51,7 @@ public final class SaberFactionsProtectionIntegration implements ProtectionInteg
     @Override
     public RequiredPlugin[] requiredPlugins() {
         return new RequiredPlugin[]{
-                RequiredPlugin.of("SaberFactions")
+                RequiredPlugin.of("Factions")
         };
     }
 
