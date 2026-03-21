@@ -9,6 +9,7 @@ import me.gypopo.economyshopgui.objects.ShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class EconomyShopGUIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(ItemStack item) {
+    public Number getBuyPrice(@NotNull ItemStack item) {
         Double price = EconomyShopGUIHook.getItemBuyPrice(copy(item));
         if (price == null) return null;
         return price * item.getAmount();
@@ -39,8 +40,8 @@ public class EconomyShopGUIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(UUID uniqueId, ItemStack item) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(uniqueId);
+    public Number getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         BuyPrice price = EconomyShopGUIHook.getBuyPrice(player, copy(item)).orElse(null);
         if (price == null) return null;
         return price.getAmount() * item.getAmount();
@@ -48,7 +49,7 @@ public class EconomyShopGUIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(ItemStack item) {
+    public Number getSellPrice(@NotNull ItemStack item) {
         ShopItem shopItem = EconomyShopGUIHook.getShopItem(copy(item));
         if (shopItem == null) return null;
         return EconomyShopGUIHook.getItemSellPrice(shopItem, copy(item)) * item.getAmount();
@@ -56,8 +57,8 @@ public class EconomyShopGUIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(UUID uniqueId, ItemStack item) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(uniqueId);
+    public Number getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         SellPrice price = EconomyShopGUIHook.getSellPrice(player, copy(item)).orElse(null);
         if (price == null) return null;
         return price.getAmount() * item.getAmount();

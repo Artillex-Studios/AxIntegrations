@@ -13,6 +13,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class WorldGuardProtection extends ProtectionIntegration {
     private com.sk89q.worldguard.WorldGuard instance;
@@ -42,29 +43,29 @@ public class WorldGuardProtection extends ProtectionIntegration {
     }
 
     @Override
-    public boolean canPlace(Player player, Location location) {
+    public boolean canPlace(@NotNull Player player, @NotNull Location location) {
         if (!testState(player, location, Flags.BUILD)) return false;
         return testState(player, location, Flags.BLOCK_PLACE);
     }
 
     @Override
-    public boolean canBreak(Player player, Location location) {
+    public boolean canBreak(@NotNull Player player, @NotNull Location location) {
         if (!testState(player, location, Flags.BUILD)) return false;
         return testState(player, location, Flags.BLOCK_BREAK);
     }
 
     @Override
-    public boolean canInteract(Player player, Location location) {
+    public boolean canInteract(@NotNull Player player, @NotNull Location location) {
         return testState(player, location, Flags.INTERACT);
     }
 
     @Override
-    public boolean canOpenContainer(Player player, Location location) {
+    public boolean canOpenContainer(@NotNull Player player, @NotNull Location location) {
         return testState(player, location, Flags.CHEST_ACCESS);
     }
 
     @Override
-    public boolean canPvP(Player player, Location location) {
+    public boolean canPvP(@NotNull Player player, @NotNull Location location) {
         return testState(player, location, Flags.PVP);
     }
 

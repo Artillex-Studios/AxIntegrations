@@ -68,19 +68,19 @@ public class CoinsEngineCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalanceAsync(UUID uniqueId) {
+    public CompletableFuture<Number> getBalanceAsync(UUID playerUUID) {
         throw new RuntimeException("Feature not supported");
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalanceAsync(UUID uniqueId, Number amount) {
+    public CompletableFuture<Boolean> giveBalanceAsync(UUID playerUUID, Number amount) {
         throw new RuntimeException("Feature not supported");
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalanceAsync(UUID uniqueId, Number amount) {
+    public CompletableFuture<Boolean> takeBalanceAsync(UUID playerUUID, Number amount) {
         throw new RuntimeException("Feature not supported");
     }
 }

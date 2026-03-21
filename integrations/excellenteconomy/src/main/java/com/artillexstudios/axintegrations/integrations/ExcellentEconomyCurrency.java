@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
-import su.nightexpress.coinsengine.api.CoinsEngineAPI;
 import su.nightexpress.excellenteconomy.api.ExcellentEconomyAPI;
 import su.nightexpress.excellenteconomy.api.currency.ExcellentCurrency;
 
@@ -73,25 +72,29 @@ public class ExcellentEconomyCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalanceAsync(UUID uniqueId) {
-        return CompletableFuture.supplyAsync(() -> {
-            return api.getBalanceAsync(uniqueId, currency).join();
-        });
+    public CompletableFuture<Number> getBalanceAsync(UUID playerUUID) {
+        CompletableFuture<Number> cf = new CompletableFuture<>();
+        api.getBalanceAsync(playerUUID, currency).thenAccept(cf::complete);
+        return cf;
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalanceAsync(UUID uniqueId, Number amount) {
-        return CompletableFuture.supplyAsync(() -> {
-            return api.depositAsync(uniqueId, currency, amount.doubleValue()).join().success();
+    public CompletableFuture<Boolean> giveBalanceAsync(UUID playerUUID, Number amount) {
+        CompletableFuture<Boolean> cf = new CompletableFuture<>();
+        api.depositAsync(playerUUID, currency, amount.doubleValue()).thenAccept(result -> {
+            cf.complete(result.success());
         });
+        return cf;
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalanceAsync(UUID uniqueId, Number amount) {
-        return CompletableFuture.supplyAsync(() -> {
-            return api.withdrawAsync(uniqueId, currency, amount.doubleValue()).join().success();
+    public CompletableFuture<Boolean> takeBalanceAsync(UUID playerUUID, Number amount) {
+        CompletableFuture<Boolean> cf = new CompletableFuture<>();
+        api.withdrawAsync(playerUUID, currency, amount.doubleValue()).thenAccept(result -> {
+            cf.complete(result.success());
         });
+        return cf;
     }
 }

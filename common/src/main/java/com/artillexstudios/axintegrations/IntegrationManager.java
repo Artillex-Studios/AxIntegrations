@@ -2,12 +2,8 @@ package com.artillexstudios.axintegrations;
 
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axintegrations.functions.EnableFunction;
-import com.artillexstudios.axintegrations.types.CurrencyIntegration;
-import com.artillexstudios.axintegrations.types.ProtectionIntegration;
-import com.artillexstudios.axintegrations.types.ShopIntegration;
 import com.artillexstudios.axintegrations.utils.PackageScanner;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -37,8 +33,7 @@ public class IntegrationManager {
         for (IntegrationType enabledType : setup.enabledTypes) {
             switch (enabledType) {
                 case CURRENCY -> reloadCurrencyIntegrations(setup.currencyEnableFunction);
-                case PROTECTION -> reloadProtectionIntegrations(setup.protectionEnableFunction);
-                case SHOP -> reloadShopIntegrations(setup.shopEnableFunction);
+                case BACKPACK, BANK, CUSTOM_BLOCK, LEVEL, PROTECTION, SHOP, STACKER, TEAM, VANISH -> reloadGenericIntegration(enabledType, setup.shopEnableFunction);
             }
         }
         printLoaded();
@@ -60,13 +55,18 @@ public class IntegrationManager {
                     loadIntegration(constructor.newInstance(currency), function);
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
+                try {
+                    Constructor<Integration> constructor = (Constructor<Integration>) clazz.getDeclaredConstructor();
+                    loadIntegration(constructor.newInstance(), function);
+                } catch (Exception ex2) {
+                    ex2.printStackTrace();
+                }
             }
         }
     }
 
-    private static void reloadProtectionIntegrations(EnableFunction function) {
-        for (Class<? extends Integration> clazz : PackageScanner.scan(IntegrationType.PROTECTION)) {
+    private static void reloadGenericIntegration(IntegrationType type, EnableFunction function) {
+        for (Class<? extends Integration> clazz : PackageScanner.scan(type)) {
             try {
                 Constructor<Integration> constructor = (Constructor<Integration>) clazz.getDeclaredConstructor();
                 loadIntegration(constructor.newInstance(), function);
@@ -74,65 +74,6 @@ public class IntegrationManager {
                 ex.printStackTrace();
             }
         }
-    }
-
-    private static void reloadShopIntegrations(EnableFunction function) {
-        for (Class<? extends Integration> clazz : PackageScanner.scan(IntegrationType.SHOP)) {
-            try {
-                Constructor<Integration> constructor = (Constructor<Integration>) clazz.getDeclaredConstructor();
-                loadIntegration(constructor.newInstance(), function);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * returns all loaded integrations
-     */
-    public static List<CurrencyIntegration> getCurrencyIntegrations() {
-        return Collections.unmodifiableList((List<CurrencyIntegration>) integrations.get(IntegrationType.CURRENCY));
-    }
-
-    /**
-     * returns all loaded integrations
-     */
-    public static List<ProtectionIntegration> getProtectionIntegrations() {
-        return Collections.unmodifiableList((List<ProtectionIntegration>) integrations.get(IntegrationType.PROTECTION));
-    }
-
-    /**
-     * returns all loaded integrations
-     */
-    public static List<ShopIntegration> getShopIntegrations() {
-        return Collections.unmodifiableList((List<ShopIntegration>) integrations.get(IntegrationType.SHOP));
-    }
-
-    /**
-     * returns a loaded integration
-     * if you register multiple, you should use {@link this#getCurrencyIntegrations()} ()} instead
-     */
-    @Nullable
-    public static CurrencyIntegration getCurrencyIntegration() {
-        return (CurrencyIntegration) integrations.get(IntegrationType.CURRENCY).getFirst();
-    }
-
-    /**
-     * returns a loaded integration
-     * if you register multiple, you should use {@link this#getProtectionIntegrations()} ()} instead
-     */
-    @Nullable
-    public static ProtectionIntegration getProtectionIntegration() {
-        return (ProtectionIntegration) integrations.get(IntegrationType.PROTECTION).getFirst();
-    }
-
-    /**
-     * returns a loaded integration
-     * if you register multiple, you should use {@link this#getShopIntegrations()} instead
-     */
-    @Nullable
-    public static ShopIntegration getShopIntegration() {
-        return (ShopIntegration) integrations.get(IntegrationType.SHOP).getFirst();
     }
 
     /**

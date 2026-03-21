@@ -1,0 +1,81 @@
+package com.artillexstudios.axintegrations.types;
+
+import com.artillexstudios.axintegrations.Integration;
+import com.artillexstudios.axintegrations.IntegrationManager;
+import com.artillexstudios.axintegrations.IntegrationType;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+/**
+ * Rules
+ * - if the plugin doesn't support XP, return 0
+ */
+public abstract class LevelIntegration extends Integration {
+
+    /**
+     * returns all loaded integrations
+     */
+    public static List<LevelIntegration> list() {
+        return IntegrationManager.getIntegrations(LevelIntegration.class);
+    }
+
+    /**
+     * returns a loaded integration
+     * if you register multiple, you should use {@link this#list()} instead
+     */
+    @Nullable
+    public static LevelIntegration one() {
+        return list().stream().findFirst().orElse(null);
+    }
+
+    public LevelIntegration(String name) {
+        super(name, IntegrationType.LEVEL);
+    }
+
+    public abstract long getLevel(@NotNull UUID player);
+
+    public abstract double getXP(@NotNull UUID player);
+
+    /**
+     * required xp for the next level
+     */
+    public abstract double getRequiredXP(@NotNull UUID player);
+
+    /**
+     * the amount of xp the player needs to get to level up
+     */
+    public abstract double getRemainingXP(@NotNull UUID player);
+
+    /**
+     * reset level and xp
+     */
+    public CompletableFuture<Boolean> reset(@NotNull UUID player) {
+        setXP(player, 0);
+        return setLevel(player, 0);
+    }
+
+    public abstract CompletableFuture<Boolean> setLevel(@NotNull UUID player, long amount);
+
+    public CompletableFuture<Boolean> giveLevel(@NotNull UUID player, long amount) {
+        return setLevel(player, getLevel(player) + amount);
+    }
+
+    public CompletableFuture<Boolean> takeLevel(@NotNull UUID player, long amount) {
+        return setLevel(player, getLevel(player) - amount);
+    }
+
+    public abstract CompletableFuture<Boolean> setXP(@NotNull UUID player, double amount);
+
+    public CompletableFuture<Boolean> giveXP(@NotNull UUID player, double amount) {
+        return setXP(player, getXP(player) + amount);
+    }
+
+    public CompletableFuture<Boolean> takeXP(@NotNull UUID player, double amount) {
+        return setXP(player, getXP(player) - amount);
+    }
+}
