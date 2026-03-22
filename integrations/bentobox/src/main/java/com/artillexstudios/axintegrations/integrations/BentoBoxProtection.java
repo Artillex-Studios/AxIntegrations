@@ -56,11 +56,6 @@ public class BentoBoxProtection extends ProtectionIntegration {
         return hasPermission(player, location, Flags.CHEST);
     }
 
-    @Override
-    public boolean canPvP(@NotNull Player player, @NotNull Location location) {
-        return hasPermission(player, location, getPvPFlag(location.getWorld()));
-    }
-
     private boolean hasPermission(Player player, Location location, Flag flag) {
         Island island = api.getIslandsManager().getIslandAt(location).orElse(null);
         if (island == null) return true;

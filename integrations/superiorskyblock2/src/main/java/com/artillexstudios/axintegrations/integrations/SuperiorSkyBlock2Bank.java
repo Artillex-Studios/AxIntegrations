@@ -2,6 +2,7 @@ package com.artillexstudios.axintegrations.integrations;
 
 import com.artillexstudios.axapi.reflection.ClassUtils;
 import com.artillexstudios.axintegrations.types.BankIntegration;
+import com.artillexstudios.axintegrations.utils.NumberTool;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.enums.BankAction;
 import com.bgsoftware.superiorskyblock.api.island.Island;
@@ -48,7 +49,7 @@ public class SuperiorSkyBlock2Bank extends BankIntegration {
     public CompletableFuture<Boolean> deposit(@NotNull UUID playerUUID, @NotNull Number amount) {
         IslandBank bank = getIslandBank(playerUUID);
         if (bank == null) return CompletableFuture.completedFuture(false);
-        BigDecimal value = toBigDecimal(amount);
+        BigDecimal value = NumberTool.toBigDecimal(amount);
         if (bank.canDepositMoney(value)) {
             BankTransaction transaction = bank.depositAdminMoney(Bukkit.getConsoleSender(), value);
             return CompletableFuture.completedFuture(transaction.getAction() == BankAction.DEPOSIT_COMPLETED);
@@ -60,7 +61,7 @@ public class SuperiorSkyBlock2Bank extends BankIntegration {
     public CompletableFuture<Boolean> withdraw(@NotNull UUID playerUUID, @NotNull Number amount) {
         IslandBank bank = getIslandBank(playerUUID);
         if (bank == null) return CompletableFuture.completedFuture(false);
-        BigDecimal value = toBigDecimal(amount);
+        BigDecimal value = NumberTool.toBigDecimal(amount);
         BankTransaction transaction = bank.withdrawAdminMoney(Bukkit.getConsoleSender(), value);
         return CompletableFuture.completedFuture(transaction.getAction() == BankAction.WITHDRAW_COMPLETED);
     }
@@ -74,18 +75,5 @@ public class SuperiorSkyBlock2Bank extends BankIntegration {
         IslandBank bank = island.getIslandBank();
         if (bank == null) return null;
         return bank;
-    }
-
-    private BigDecimal toBigDecimal(Number number) {
-        if (number == null) return null;
-        if (number instanceof BigDecimal) {
-            return (BigDecimal) number;
-        } else if (number instanceof Long || number instanceof Integer) {
-            return BigDecimal.valueOf(number.longValue());
-        } else if (number instanceof Double || number instanceof Float) {
-            return BigDecimal.valueOf(number.doubleValue());
-        } else {
-            return new BigDecimal(number.toString());
-        }
     }
 }

@@ -46,11 +46,6 @@ public class SuperiorSkyBlock2Protection extends ProtectionIntegration {
         return hasPermission(player, location, IslandPrivilege.getByName("CHEST_ACCESS"));
     }
 
-    @Override
-    public boolean canPvP(@NotNull Player player, @NotNull Location location) {
-        return hasPermission(player, location, IslandPrivilege.getByName("ANIMAL_DAMAGE")); // todo: this might be incorrect
-    }
-
     private boolean hasPermission(Player player, Location location, IslandPrivilege privilege) {
         Island island = SuperiorSkyblockAPI.getIslandAt(location);
         if (island == null) return true;

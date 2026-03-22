@@ -2,6 +2,7 @@ package com.artillexstudios.axintegrations.integrations;
 
 import com.artillexstudios.axapi.reflection.ClassUtils;
 import com.artillexstudios.axintegrations.types.BankIntegration;
+import com.artillexstudios.axintegrations.utils.NumberTool;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.bentobox.bank.Bank;
@@ -64,7 +65,7 @@ public class BentoBoxBank extends BankIntegration {
         Island island = getIsland(playerUUID);
         if (island == null) return CompletableFuture.completedFuture(false);
         CompletableFuture<Boolean> cf = new CompletableFuture<>();
-        manager.deposit(User.getInstance(playerUUID), island, new Money(toBigDecimal(amount)), TxType.DEPOSIT).thenAccept(response -> {
+        manager.deposit(User.getInstance(playerUUID), island, new Money(NumberTool.toBigDecimal(amount)), TxType.DEPOSIT).thenAccept(response -> {
             cf.complete(response == BankResponse.SUCCESS);
         });
         return cf;
@@ -75,7 +76,7 @@ public class BentoBoxBank extends BankIntegration {
         Island island = getIsland(playerUUID);
         if (island == null) return CompletableFuture.completedFuture(false);
         CompletableFuture<Boolean> cf = new CompletableFuture<>();
-        manager.withdraw(User.getInstance(playerUUID), island, new Money(toBigDecimal(amount)), TxType.WITHDRAW).thenAccept(response -> {
+        manager.withdraw(User.getInstance(playerUUID), island, new Money(NumberTool.toBigDecimal(amount)), TxType.WITHDRAW).thenAccept(response -> {
             cf.complete(response == BankResponse.SUCCESS);
         });
         return cf;
@@ -89,18 +90,5 @@ public class BentoBoxBank extends BankIntegration {
             }
         }
         return null;
-    }
-
-    private BigDecimal toBigDecimal(Number number) {
-        if (number == null) return null;
-        if (number instanceof BigDecimal) {
-            return (BigDecimal) number;
-        } else if (number instanceof Long || number instanceof Integer) {
-            return BigDecimal.valueOf(number.longValue());
-        } else if (number instanceof Double || number instanceof Float) {
-            return BigDecimal.valueOf(number.doubleValue());
-        } else {
-            return new BigDecimal(number.toString());
-        }
     }
 }

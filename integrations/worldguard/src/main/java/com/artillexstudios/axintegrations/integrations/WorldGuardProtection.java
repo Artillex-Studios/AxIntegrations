@@ -64,11 +64,6 @@ public class WorldGuardProtection extends ProtectionIntegration {
         return testState(player, location, Flags.CHEST_ACCESS);
     }
 
-    @Override
-    public boolean canPvP(@NotNull Player player, @NotNull Location location) {
-        return testState(player, location, Flags.PVP);
-    }
-
     private boolean testState(Player player, Location location, StateFlag flag) {
         LocalPlayer localPlayer = pluginInstance.wrapPlayer(player);
         World world = BukkitAdapter.adapt(player.getWorld());

@@ -43,6 +43,4 @@ public abstract class ProtectionIntegration extends Integration {
     public abstract boolean canInteract(@NotNull Player player, @NotNull Location location);
 
     public abstract boolean canOpenContainer(@NotNull Player player, @NotNull Location location);
-
-    public abstract boolean canPvP(@NotNull Player player, @NotNull Location location);
 }
