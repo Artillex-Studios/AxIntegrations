@@ -3,6 +3,9 @@ package com.artillexstudios.axintegrations.types;
 import com.artillexstudios.axintegrations.Integration;
 import com.artillexstudios.axintegrations.IntegrationManager;
 import com.artillexstudios.axintegrations.IntegrationType;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -32,4 +35,12 @@ public abstract class CustomBlockIntegration extends Integration {
     public CustomBlockIntegration(String name) {
         super(name, IntegrationType.CUSTOM_BLOCK);
     }
+
+    public abstract boolean isCustomBlock(@NotNull String itemId);
+
+    public abstract boolean isCustomBlock(@NotNull Location location);
+
+    public abstract boolean place(@NotNull String itemId, @NotNull Location location);
+
+    public abstract boolean remove(@NotNull Location location);
 }

@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Rules
  * - currency is null unless it is a multi currency supporting plugin
+ * - if {@link this#worksOffline()} is false but an offline player is queried or not found, return false or 0 with {@link CompletableFuture}
  */
 public abstract class CurrencyIntegration extends Integration {
     private final String currency;
@@ -50,21 +51,25 @@ public abstract class CurrencyIntegration extends Integration {
         return "%s-%s".formatted(getName(), currency);
     }
 
+    /**
+     * does this integration work on offline players?
+     */
     public abstract boolean worksOffline();
 
+    /**
+     * use {@link this#getBalance(UUID)} if possible
+     * this method is just to retrieve cached balance
+     * only use this to display balance, don't allow purchases just by using this
+     */
     @NotNull
-    public abstract Number getBalance(Player player);
-
-    public abstract boolean giveBalance(Player player, Number amount);
-
-    public abstract boolean takeBalance(Player player, Number amount);
-
-    @NotNull
-    public abstract CompletableFuture<Number> getBalanceAsync(UUID playerUUID);
+    public abstract Number getBalance(@NotNull Player player);
 
     @NotNull
-    public abstract CompletableFuture<Boolean> giveBalanceAsync(UUID playerUUID, Number amount);
+    public abstract CompletableFuture<Number> getBalance(@NotNull UUID playerUUID);
 
     @NotNull
-    public abstract CompletableFuture<Boolean> takeBalanceAsync(UUID playerUUID, Number amount);
+    public abstract CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount);
+
+    @NotNull
+    public abstract CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount);
 }

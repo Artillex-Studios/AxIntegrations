@@ -56,18 +56,18 @@ public class AxGensLevel extends LevelIntegration {
     }
 
     @Override
-    public CompletableFuture<Boolean> setLevel(@NotNull UUID player, long amount) {
-        AxGensUser user = Users.getUser(player);
+    public CompletableFuture<Boolean> setLevel(@NotNull UUID playerUUID, long amount) {
+        AxGensUser user = Users.getUser(playerUUID);
         if (user == null) CompletableFuture.completedFuture(false);
         user.setLevel(amount);
         AxGens.getThreadedQueue().submit(() -> {
-            AxGens.getDatabase().updateUser(player, amount);
+            AxGens.getDatabase().updateUser(playerUUID, amount);
         });
         return CompletableFuture.completedFuture(true);
     }
 
     @Override
-    public CompletableFuture<Boolean> setXP(@NotNull UUID player, double amount) {
+    public CompletableFuture<Boolean> setXP(@NotNull UUID playerUUID, double amount) {
         return CompletableFuture.completedFuture(true);
     }
 }

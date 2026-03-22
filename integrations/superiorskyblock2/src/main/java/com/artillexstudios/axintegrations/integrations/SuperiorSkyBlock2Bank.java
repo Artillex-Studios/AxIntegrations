@@ -9,6 +9,7 @@ import com.bgsoftware.superiorskyblock.api.island.bank.BankTransaction;
 import com.bgsoftware.superiorskyblock.api.island.bank.IslandBank;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
@@ -37,14 +38,14 @@ public class SuperiorSkyBlock2Bank extends BankIntegration {
     }
 
     @Override
-    public CompletableFuture<Number> getBalance(UUID playerUUID) {
+    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
         IslandBank bank = getIslandBank(playerUUID);
         if (bank == null) return CompletableFuture.completedFuture(0);
         return CompletableFuture.completedFuture(bank.getBalance());
     }
 
     @Override
-    public CompletableFuture<Boolean> deposit(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> deposit(@NotNull UUID playerUUID, @NotNull Number amount) {
         IslandBank bank = getIslandBank(playerUUID);
         if (bank == null) return CompletableFuture.completedFuture(false);
         BigDecimal value = toBigDecimal(amount);
@@ -56,7 +57,7 @@ public class SuperiorSkyBlock2Bank extends BankIntegration {
     }
 
     @Override
-    public CompletableFuture<Boolean> withdraw(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> withdraw(@NotNull UUID playerUUID, @NotNull Number amount) {
         IslandBank bank = getIslandBank(playerUUID);
         if (bank == null) return CompletableFuture.completedFuture(false);
         BigDecimal value = toBigDecimal(amount);

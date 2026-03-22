@@ -2,6 +2,7 @@ package com.artillexstudios.axintegrations.integrations;
 
 import com.artillexstudios.axapi.reflection.ClassUtils;
 import com.artillexstudios.axintegrations.types.BankIntegration;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.bentobox.bank.Bank;
 import world.bentobox.bank.BankManager;
@@ -52,14 +53,14 @@ public class BentoBoxBank extends BankIntegration {
     }
 
     @Override
-    public CompletableFuture<Number> getBalance(UUID playerUUID) {
+    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
         Island island = getIsland(playerUUID);
         if (island == null) return CompletableFuture.completedFuture(0);
         return CompletableFuture.completedFuture(manager.getBalance(island).getValue());
     }
 
     @Override
-    public CompletableFuture<Boolean> deposit(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> deposit(@NotNull UUID playerUUID, @NotNull Number amount) {
         Island island = getIsland(playerUUID);
         if (island == null) return CompletableFuture.completedFuture(false);
         CompletableFuture<Boolean> cf = new CompletableFuture<>();
@@ -70,7 +71,7 @@ public class BentoBoxBank extends BankIntegration {
     }
 
     @Override
-    public CompletableFuture<Boolean> withdraw(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> withdraw(@NotNull UUID playerUUID, @NotNull Number amount) {
         Island island = getIsland(playerUUID);
         if (island == null) return CompletableFuture.completedFuture(false);
         CompletableFuture<Boolean> cf = new CompletableFuture<>();

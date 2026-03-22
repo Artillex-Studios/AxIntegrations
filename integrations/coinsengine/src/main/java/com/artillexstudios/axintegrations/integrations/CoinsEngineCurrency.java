@@ -3,6 +3,7 @@ package com.artillexstudios.axintegrations.integrations;
 import com.artillexstudios.axapi.reflection.ClassUtils;
 import com.artillexstudios.axintegrations.IntegrationManager;
 import com.artillexstudios.axintegrations.types.CurrencyIntegration;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import su.nightexpress.coinsengine.api.CoinsEngineAPI;
@@ -50,37 +51,33 @@ public class CoinsEngineCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public Number getBalance(Player player) {
+    public Number getBalance(@NotNull Player player) {
         return CoinsEngineAPI.getBalance(player, currency);
     }
 
+    @NotNull
     @Override
-    public boolean giveBalance(Player player, Number amount) {
+    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+        Player player = Bukkit.getPlayer(playerUUID);
+        if (player == null) return CompletableFuture.completedFuture(0);
+        return CompletableFuture.completedFuture(getBalance(player));
+    }
+
+    @NotNull
+    @Override
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+        Player player = Bukkit.getPlayer(playerUUID);
+        if (player == null) return CompletableFuture.completedFuture(false);
         CoinsEngineAPI.addBalance(player, currency, amount.doubleValue());
-        return true;
+        return CompletableFuture.completedFuture(true);
     }
 
+    @NotNull
     @Override
-    public boolean takeBalance(Player player, Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+        Player player = Bukkit.getPlayer(playerUUID);
+        if (player == null) return CompletableFuture.completedFuture(false);
         CoinsEngineAPI.removeBalance(player, currency, amount.doubleValue());
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public CompletableFuture<Number> getBalanceAsync(UUID playerUUID) {
-        throw new RuntimeException("Feature not supported");
-    }
-
-    @NotNull
-    @Override
-    public CompletableFuture<Boolean> giveBalanceAsync(UUID playerUUID, Number amount) {
-        throw new RuntimeException("Feature not supported");
-    }
-
-    @NotNull
-    @Override
-    public CompletableFuture<Boolean> takeBalanceAsync(UUID playerUUID, Number amount) {
-        throw new RuntimeException("Feature not supported");
+        return CompletableFuture.completedFuture(true);
     }
 }

@@ -13,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Rules
  * - if the balance can't be retrieved, return 0
+ * - if {@link this#worksOffline()} is false but an offline player is queried or not found, return false or 0 with {@link CompletableFuture}
  */
 public abstract class BankIntegration extends Integration {
 
@@ -39,9 +40,9 @@ public abstract class BankIntegration extends Integration {
     public abstract boolean worksOffline();
 
     @NotNull
-    public abstract CompletableFuture<Number> getBalance(UUID playerUUID);
+    public abstract CompletableFuture<Number> getBalance(@NotNull UUID playerUUID);
 
-    public abstract CompletableFuture<Boolean> deposit(UUID playerUUID, Number amount);
+    public abstract CompletableFuture<Boolean> deposit(@NotNull UUID playerUUID, @NotNull Number amount);
 
-    public abstract CompletableFuture<Boolean> withdraw(UUID playerUUID, Number amount);
+    public abstract CompletableFuture<Boolean> withdraw(@NotNull UUID playerUUID, @NotNull Number amount);
 }

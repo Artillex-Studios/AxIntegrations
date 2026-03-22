@@ -3,7 +3,6 @@ package com.artillexstudios.axintegrations.types;
 import com.artillexstudios.axintegrations.Integration;
 import com.artillexstudios.axintegrations.IntegrationManager;
 import com.artillexstudios.axintegrations.IntegrationType;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,23 +58,23 @@ public abstract class LevelIntegration extends Integration {
         return setLevel(player, 0);
     }
 
-    public abstract CompletableFuture<Boolean> setLevel(@NotNull UUID player, long amount);
+    public abstract CompletableFuture<Boolean> setLevel(@NotNull UUID playerUUID, long amount);
 
-    public CompletableFuture<Boolean> giveLevel(@NotNull UUID player, long amount) {
-        return setLevel(player, getLevel(player) + amount);
+    public CompletableFuture<Boolean> giveLevel(@NotNull UUID playerUUID, long amount) {
+        return setLevel(playerUUID, getLevel(playerUUID) + amount);
     }
 
-    public CompletableFuture<Boolean> takeLevel(@NotNull UUID player, long amount) {
-        return setLevel(player, getLevel(player) - amount);
+    public CompletableFuture<Boolean> takeLevel(@NotNull UUID playerUUID, long amount) {
+        return setLevel(playerUUID, getLevel(playerUUID) - amount);
     }
 
-    public abstract CompletableFuture<Boolean> setXP(@NotNull UUID player, double amount);
+    public abstract CompletableFuture<Boolean> setXP(@NotNull UUID playerUUID, double amount);
 
-    public CompletableFuture<Boolean> giveXP(@NotNull UUID player, double amount) {
-        return setXP(player, getXP(player) + amount);
+    public CompletableFuture<Boolean> giveXP(@NotNull UUID playerUUID, double amount) {
+        return setXP(playerUUID, getXP(playerUUID) + amount);
     }
 
-    public CompletableFuture<Boolean> takeXP(@NotNull UUID player, double amount) {
-        return setXP(player, getXP(player) - amount);
+    public CompletableFuture<Boolean> takeXP(@NotNull UUID playerUUID, double amount) {
+        return setXP(playerUUID, getXP(playerUUID) - amount);
     }
 }

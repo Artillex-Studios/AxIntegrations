@@ -9,7 +9,7 @@ public abstract class Integration {
     private final String name;
     private final IntegrationType type;
 
-    protected Integration(String name, IntegrationType type) {
+    protected Integration(@NotNull String name, @NotNull IntegrationType type) {
         this.name = name;
         this.type = type;
     }

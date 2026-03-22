@@ -49,12 +49,12 @@ public class AxHoesLevel extends LevelIntegration {
     }
 
     @Override
-    public CompletableFuture<Boolean> setLevel(@NotNull UUID player, long amount) {
-        return api.setLevel(player, amount);
+    public CompletableFuture<Boolean> setLevel(@NotNull UUID playerUUID, long amount) {
+        return api.setLevel(playerUUID, amount);
     }
 
     @Override
-    public CompletableFuture<Boolean> setXP(@NotNull UUID player, double amount) {
-        return api.setXP(player, amount);
+    public CompletableFuture<Boolean> setXP(@NotNull UUID playerUUID, double amount) {
+        return api.setXP(playerUUID, amount);
     }
 }

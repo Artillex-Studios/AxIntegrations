@@ -56,23 +56,13 @@ public class ExcellentEconomyCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public Number getBalance(Player player) {
+    public Number getBalance(@NotNull Player player) {
         return api.getBalance(player, currency);
-    }
-
-    @Override
-    public boolean giveBalance(Player player, Number amount) {
-        return api.deposit(player, currency, amount.doubleValue());
-    }
-
-    @Override
-    public boolean takeBalance(Player player, Number amount) {
-        return api.withdraw(player, currency, amount.doubleValue());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalanceAsync(UUID playerUUID) {
+    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
         CompletableFuture<Number> cf = new CompletableFuture<>();
         api.getBalanceAsync(playerUUID, currency).thenAccept(cf::complete);
         return cf;
@@ -80,7 +70,7 @@ public class ExcellentEconomyCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalanceAsync(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
         CompletableFuture<Boolean> cf = new CompletableFuture<>();
         api.depositAsync(playerUUID, currency, amount.doubleValue()).thenAccept(result -> {
             cf.complete(result.success());
@@ -90,7 +80,7 @@ public class ExcellentEconomyCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalanceAsync(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
         CompletableFuture<Boolean> cf = new CompletableFuture<>();
         api.withdrawAsync(playerUUID, currency, amount.doubleValue()).thenAccept(result -> {
             cf.complete(result.success());

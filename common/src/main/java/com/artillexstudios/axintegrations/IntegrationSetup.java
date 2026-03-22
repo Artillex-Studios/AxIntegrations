@@ -1,5 +1,6 @@
 package com.artillexstudios.axintegrations;
 
+import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axintegrations.functions.CurrencySetupFunction;
 import com.artillexstudios.axintegrations.functions.EnableFunction;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -92,6 +93,9 @@ public class IntegrationSetup {
     }
 
     public void setup() {
-        IntegrationManager.setup(this);
+        // run a tick later to make sure that all plugins have loaded
+        Scheduler.get().runLater(() -> {
+            IntegrationManager.setup(this);
+        }, 1);
     }
 }

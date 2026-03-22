@@ -32,23 +32,13 @@ public class AxQuestBoardCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public Number getBalance(Player player) {
-        throw new RuntimeException("Feature not supported"); // todo
-    }
-
-    @Override
-    public boolean giveBalance(Player player, Number amount) {
-        throw new RuntimeException("Feature not supported");
-    }
-
-    @Override
-    public boolean takeBalance(Player player, Number amount) {
-        throw new RuntimeException("Feature not supported");
+    public Number getBalance(@NotNull Player player) {
+        return AxQuestBoardAPI.getPoints(player.getUniqueId()); // todo: add better method
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalanceAsync(UUID playerUUID) {
+    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
         CompletableFuture<Number> cf = new CompletableFuture<>();
         AxQuestBoardAPI.getQuestPoints(playerUUID).thenAccept(cf::complete);
         return cf;
@@ -56,13 +46,13 @@ public class AxQuestBoardCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalanceAsync(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
         return AxQuestBoardAPI.giveQuestPoints(playerUUID, amount.intValue());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalanceAsync(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
         return AxQuestBoardAPI.takeQuestPoints(playerUUID, amount.intValue());
     }
 }

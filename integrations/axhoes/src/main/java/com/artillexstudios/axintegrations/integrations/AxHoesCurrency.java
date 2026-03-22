@@ -42,35 +42,25 @@ public class AxHoesCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public Number getBalance(Player player) {
+    public Number getBalance(@NotNull Player player) {
         return api.getBalance(player.getUniqueId());
-    }
-
-    @Override
-    public boolean giveBalance(Player player, Number amount) {
-        throw new RuntimeException("Feature not supported");
-    }
-
-    @Override
-    public boolean takeBalance(Player player, Number amount) {
-        throw new RuntimeException("Feature not supported");
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalanceAsync(UUID playerUUID) {
+    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
         return CompletableFuture.completedFuture(api.getBalance(playerUUID));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalanceAsync(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
         return api.giveBalance(playerUUID, amount.doubleValue());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalanceAsync(UUID playerUUID, Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
         return api.takeBalance(playerUUID, amount.doubleValue());
     }
 }
