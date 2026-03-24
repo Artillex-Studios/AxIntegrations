@@ -40,7 +40,7 @@ public class CMIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(@NotNull ItemStack item) {
+    public Double getBuyPrice(@NotNull ItemStack item) {
         WorthItem worthItem = manager.getWorth(copy(item));
         if (worthItem == null) return null;
         if (worthItem.getBuyPrice() == null) return null;
@@ -49,13 +49,13 @@ public class CMIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
         return getBuyPrice(item);
     }
 
     @Nullable
     @Override
-    public Number getSellPrice(@NotNull ItemStack item) {
+    public Double getSellPrice(@NotNull ItemStack item) {
         WorthItem worthItem = manager.getWorth(copy(item));
         if (worthItem == null) return null;
         if (worthItem.getSellPrice() == null) return null;
@@ -64,7 +64,7 @@ public class CMIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
         return getSellPrice(item);
     }
 }

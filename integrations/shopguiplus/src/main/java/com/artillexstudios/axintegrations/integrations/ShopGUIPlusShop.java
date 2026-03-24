@@ -29,7 +29,7 @@ public class ShopGUIPlusShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(@NotNull ItemStack item) {
+    public Double getBuyPrice(@NotNull ItemStack item) {
         double price = ShopGuiPlusApi.getItemStackPriceBuy(copy(item));
         if (price == -1.0D) return null;
         return price * item.getAmount();
@@ -37,7 +37,7 @@ public class ShopGUIPlusShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return getBuyPrice(item);
         double price = ShopGuiPlusApi.getItemStackPriceBuy(player, copy(item));
@@ -47,7 +47,7 @@ public class ShopGUIPlusShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(@NotNull ItemStack item) {
+    public Double getSellPrice(@NotNull ItemStack item) {
         double price = ShopGuiPlusApi.getItemStackPriceSell(copy(item));
         if (price == -1.0D) return null;
         return price * item.getAmount();
@@ -55,7 +55,7 @@ public class ShopGUIPlusShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return getBuyPrice(item);
         double price = ShopGuiPlusApi.getItemStackPriceSell(player, copy(item));

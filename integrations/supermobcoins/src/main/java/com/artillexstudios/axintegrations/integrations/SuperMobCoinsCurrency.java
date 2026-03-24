@@ -5,7 +5,6 @@ import com.artillexstudios.axintegrations.types.CurrencyIntegration;
 import me.swanis.mobcoins.MobCoinsAPI;
 import me.swanis.mobcoins.profile.Profile;
 import me.swanis.mobcoins.profile.ProfileManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,37 +40,36 @@ public class SuperMobCoinsCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         Profile profile = manager.getProfile(player);
-        if (profile == null) return 0;
-        return profile.getMobCoins();
+        if (profile == null) return 0D;
+        return (double) profile.getMobCoins();
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         Profile profile = manager.getProfile(playerUUID);
-        if (profile == null) return CompletableFuture.completedFuture(0);
-        return CompletableFuture.completedFuture(profile.getMobCoins());
+        if (profile == null) return CompletableFuture.completedFuture(0D);
+        return CompletableFuture.completedFuture((double) profile.getMobCoins());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         Profile profile = manager.getProfile(playerUUID);
         if (profile == null) return CompletableFuture.completedFuture(false);
-        profile.setMobCoins(profile.getMobCoins() + amount.longValue());
+        profile.setMobCoins((long) (profile.getMobCoins() + amount));
         return CompletableFuture.completedFuture(true);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         Profile profile = manager.getProfile(playerUUID);
         if (profile == null) return CompletableFuture.completedFuture(false);
-        profile.setMobCoins(profile.getMobCoins() - amount.longValue());
+        profile.setMobCoins((long) (profile.getMobCoins() - amount));
         return CompletableFuture.completedFuture(true);
     }
 }

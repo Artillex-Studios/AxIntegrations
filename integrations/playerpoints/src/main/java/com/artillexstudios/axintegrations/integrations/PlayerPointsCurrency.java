@@ -42,27 +42,26 @@ public class PlayerPointsCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
-        return api.look(player.getUniqueId());
+    public double getBalance(@NotNull Player player) {
+        return (double) api.look(player.getUniqueId());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
-        return CompletableFuture.completedFuture(api.look(playerUUID));
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
+        return CompletableFuture.completedFuture((double) api.look(playerUUID));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
-        return CompletableFuture.completedFuture(api.give(playerUUID, amount.intValue()));
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
+        return CompletableFuture.completedFuture(api.give(playerUUID, (int) amount));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
-        return CompletableFuture.completedFuture(api.take(playerUUID, amount.intValue()));
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
+        return CompletableFuture.completedFuture(api.take(playerUUID, (int) amount));
     }
 }

@@ -39,29 +39,28 @@ public class RoyaleEconomyCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         return api.balance.getBalance(player.getUniqueId().toString());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         return CompletableFuture.completedFuture(api.balance.getBalance(playerUUID.toString()));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
-        api.balance.addBalance(playerUUID.toString(), amount.doubleValue());
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
+        api.balance.addBalance(playerUUID.toString(), amount);
         return CompletableFuture.completedFuture(true);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
-        api.balance.removeBalance(playerUUID.toString(), amount.doubleValue());
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
+        api.balance.removeBalance(playerUUID.toString(), amount);
         return CompletableFuture.completedFuture(true);
     }
 }

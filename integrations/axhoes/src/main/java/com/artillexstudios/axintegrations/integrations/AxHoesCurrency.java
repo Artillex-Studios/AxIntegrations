@@ -40,27 +40,26 @@ public class AxHoesCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         return api.getBalance(player.getUniqueId());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         return CompletableFuture.completedFuture(api.getBalance(playerUUID));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
-        return api.giveBalance(playerUUID, amount.doubleValue());
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
+        return api.giveBalance(playerUUID, amount);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
-        return api.takeBalance(playerUUID, amount.doubleValue());
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
+        return api.takeBalance(playerUUID, amount);
     }
 }

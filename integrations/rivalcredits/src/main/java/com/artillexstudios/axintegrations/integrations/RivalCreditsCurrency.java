@@ -40,32 +40,31 @@ public class RivalCreditsCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         return api.getCredits(player);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
         return CompletableFuture.completedFuture(api.getCredits(offlinePlayer));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-        api.addCredits(offlinePlayer, amount.doubleValue());
+        api.addCredits(offlinePlayer, amount);
         return CompletableFuture.completedFuture(true);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-        api.removeCredits(offlinePlayer, amount.doubleValue());
+        api.removeCredits(offlinePlayer, amount);
         return CompletableFuture.completedFuture(true);
     }
 }

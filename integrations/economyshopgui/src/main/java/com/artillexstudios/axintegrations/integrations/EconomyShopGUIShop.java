@@ -32,7 +32,7 @@ public class EconomyShopGUIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(@NotNull ItemStack item) {
+    public Double getBuyPrice(@NotNull ItemStack item) {
         Double price = EconomyShopGUIHook.getItemBuyPrice(copy(item));
         if (price == null) return null;
         return price * item.getAmount();
@@ -40,16 +40,16 @@ public class EconomyShopGUIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         BuyPrice price = EconomyShopGUIHook.getBuyPrice(player, copy(item)).orElse(null);
         if (price == null) return null;
-        return price.getAmount() * item.getAmount();
+        return (double) (price.getAmount() * item.getAmount());
     }
 
     @Nullable
     @Override
-    public Number getSellPrice(@NotNull ItemStack item) {
+    public Double getSellPrice(@NotNull ItemStack item) {
         ShopItem shopItem = EconomyShopGUIHook.getShopItem(copy(item));
         if (shopItem == null) return null;
         return EconomyShopGUIHook.getItemSellPrice(shopItem, copy(item)) * item.getAmount();
@@ -57,10 +57,10 @@ public class EconomyShopGUIShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         SellPrice price = EconomyShopGUIHook.getSellPrice(player, copy(item)).orElse(null);
         if (price == null) return null;
-        return price.getAmount() * item.getAmount();
+        return (double) (price.getAmount() * item.getAmount());
     }
 }

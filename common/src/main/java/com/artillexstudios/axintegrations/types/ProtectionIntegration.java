@@ -32,6 +32,33 @@ public abstract class ProtectionIntegration extends Integration {
         return list().stream().findFirst().orElse(null);
     }
 
+    public enum Permission {
+        PLACE,
+        BREAK,
+        INTERACT,
+        OPEN_CONTAINER
+    }
+
+    public static boolean hasPermission(@NotNull Player player, @NotNull Location location, @NotNull Permission permission) {
+        for (ProtectionIntegration protectionIntegration : list()) {
+            switch (permission) {
+                case PLACE -> {
+                    if (!protectionIntegration.canPlace(player, location)) return false;
+                }
+                case BREAK -> {
+                    if (!protectionIntegration.canBreak(player, location)) return false;
+                }
+                case INTERACT -> {
+                    if (!protectionIntegration.canInteract(player, location)) return false;
+                }
+                case OPEN_CONTAINER -> {
+                    if (!protectionIntegration.canOpenContainer(player, location)) return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public ProtectionIntegration(String name) {
         super(name, IntegrationType.PROTECTION);
     }

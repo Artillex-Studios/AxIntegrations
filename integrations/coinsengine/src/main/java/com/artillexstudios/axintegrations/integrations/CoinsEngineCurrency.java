@@ -49,35 +49,34 @@ public class CoinsEngineCurrency extends CurrencyIntegration {
         return false;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         return CoinsEngineAPI.getBalance(player, currency);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
-        if (player == null) return CompletableFuture.completedFuture(0);
+        if (player == null) return CompletableFuture.completedFuture(0D);
         return CompletableFuture.completedFuture(getBalance(player));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return CompletableFuture.completedFuture(false);
-        CoinsEngineAPI.addBalance(player, currency, amount.doubleValue());
+        CoinsEngineAPI.addBalance(player, currency, amount);
         return CompletableFuture.completedFuture(true);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return CompletableFuture.completedFuture(false);
-        CoinsEngineAPI.removeBalance(player, currency, amount.doubleValue());
+        CoinsEngineAPI.removeBalance(player, currency, amount);
         return CompletableFuture.completedFuture(true);
     }
 }

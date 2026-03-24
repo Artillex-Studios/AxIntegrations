@@ -39,33 +39,32 @@ public class TokenManagerCurrency extends CurrencyIntegration {
         return false;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
-        return api.getTokens(player).orElse(0);
+    public double getBalance(@NotNull Player player) {
+        return (double) api.getTokens(player).orElse(0);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
-        if (player == null) return CompletableFuture.completedFuture(0);
+        if (player == null) return CompletableFuture.completedFuture(0D);
         return CompletableFuture.completedFuture(getBalance(player));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return CompletableFuture.completedFuture(false);
-        return CompletableFuture.completedFuture(api.addTokens(player, amount.longValue()));
+        return CompletableFuture.completedFuture(api.addTokens(player, (long) amount));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return CompletableFuture.completedFuture(false);
-        return CompletableFuture.completedFuture(api.removeTokens(player, amount.longValue()));
+        return CompletableFuture.completedFuture(api.removeTokens(player, (long) amount));
     }
 }

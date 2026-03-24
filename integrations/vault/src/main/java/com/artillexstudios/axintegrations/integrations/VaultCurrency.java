@@ -43,32 +43,31 @@ public class VaultCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         return api.getBalance(player);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
         return CompletableFuture.completedFuture(api.getBalance(offlinePlayer));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-        EconomyResponse response = api.depositPlayer(offlinePlayer, amount.doubleValue());
+        EconomyResponse response = api.depositPlayer(offlinePlayer, amount);
         return CompletableFuture.completedFuture(response.transactionSuccess());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-        EconomyResponse response = api.withdrawPlayer(offlinePlayer, amount.doubleValue());
+        EconomyResponse response = api.withdrawPlayer(offlinePlayer, amount);
         return CompletableFuture.completedFuture(response.transactionSuccess());
     }
 }

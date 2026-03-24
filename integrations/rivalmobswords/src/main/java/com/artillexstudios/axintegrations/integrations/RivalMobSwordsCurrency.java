@@ -44,32 +44,31 @@ public class RivalMobSwordsCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         return manager.getEconomyAmount(player);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
         return CompletableFuture.completedFuture(manager.getEconomyAmount(offlinePlayer));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-        manager.giveEconomyAmount(offlinePlayer, amount.doubleValue());
+        manager.giveEconomyAmount(offlinePlayer, amount);
         return CompletableFuture.completedFuture(true);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-        manager.removeEconomyAmount(offlinePlayer, amount.doubleValue());
+        manager.removeEconomyAmount(offlinePlayer, amount);
         return CompletableFuture.completedFuture(true);
     }
 }

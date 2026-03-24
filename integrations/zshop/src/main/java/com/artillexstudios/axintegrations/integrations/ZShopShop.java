@@ -40,7 +40,7 @@ public class ZShopShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(@NotNull ItemStack item) {
+    public Double getBuyPrice(@NotNull ItemStack item) {
         ItemButton button = manager.getItemButton(item.getType()).orElse(null);
         if (button == null) return null;
         return button.getBuyPrice(item.getAmount());
@@ -48,7 +48,7 @@ public class ZShopShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return getBuyPrice(item);
         ItemButton button = manager.getItemButton(item.getType()).orElse(null);
@@ -58,7 +58,7 @@ public class ZShopShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(@NotNull ItemStack item) {
+    public Double getSellPrice(@NotNull ItemStack item) {
         ItemButton button = manager.getItemButton(item.getType()).orElse(null);
         if (button == null) return null;
         return button.getSellPrice(item.getAmount());
@@ -66,7 +66,7 @@ public class ZShopShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return getSellPrice(item);
         ItemButton button = manager.getItemButton(item.getType()).orElse(null);

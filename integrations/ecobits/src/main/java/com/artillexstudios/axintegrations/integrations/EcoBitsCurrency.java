@@ -10,10 +10,8 @@ import com.willfp.ecobits.currencies.CurrencyUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -54,22 +52,21 @@ public class EcoBitsCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
-        return CurrencyUtils.getBalance(player, currency);
+    public double getBalance(@NotNull Player player) {
+        return CurrencyUtils.getBalance(player, currency).doubleValue();
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-        return CompletableFuture.completedFuture(CurrencyUtils.getBalance(offlinePlayer, currency));
+        return CompletableFuture.completedFuture(CurrencyUtils.getBalance(offlinePlayer, currency).doubleValue());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
         CurrencyUtils.adjustBalance(offlinePlayer, currency, NumberTool.toBigDecimal(amount));
         return CompletableFuture.completedFuture(true);
@@ -77,7 +74,7 @@ public class EcoBitsCurrency extends CurrencyIntegration {
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
         CurrencyUtils.adjustBalance(offlinePlayer, currency, NumberTool.toBigDecimal(amount).negate());
         return CompletableFuture.completedFuture(false);

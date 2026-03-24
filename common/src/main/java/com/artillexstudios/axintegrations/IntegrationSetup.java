@@ -6,22 +6,16 @@ import com.artillexstudios.axintegrations.functions.EnableFunction;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class IntegrationSetup {
     protected JavaPlugin javaPlugin;
     protected final List<IntegrationType> enabledTypes = new ArrayList<>();
-    protected EnableFunction backpackEnableFunction;
-    protected EnableFunction bankEnableFunction;
-    protected EnableFunction currencyEnableFunction;
+    protected Map<IntegrationType, EnableFunction> enableFunctionMap = new HashMap<>();
     protected CurrencySetupFunction currencySetupFunction;
-    protected EnableFunction customBlockEnableFunction;
-    protected EnableFunction levelEnableFunction;
-    protected EnableFunction protectionEnableFunction;
-    protected EnableFunction shopEnableFunction;
-    protected EnableFunction stackerEnableFunction;
-    protected EnableFunction teamEnableFunction;
-    protected EnableFunction vanishEnableFunction;
 
     protected IntegrationSetup() {}
 
@@ -32,70 +26,68 @@ public class IntegrationSetup {
     }
 
     public IntegrationSetup enableBackpackIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.BACKPACK);
-        this.backpackEnableFunction = enableFunction;
+        enable(IntegrationType.BACKPACK, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableBankIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.BANK);
-        this.bankEnableFunction = enableFunction;
+        enable(IntegrationType.BANK, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableCurrencyIntegrations(EnableFunction enableFunction, CurrencySetupFunction currencySetupFunction) {
-        enabledTypes.add(IntegrationType.CURRENCY);
-        this.currencyEnableFunction = enableFunction;
         this.currencySetupFunction = currencySetupFunction;
+        enable(IntegrationType.CURRENCY, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableCustomBlockIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.CUSTOM_BLOCK);
-        this.customBlockEnableFunction = enableFunction;
+        enable(IntegrationType.CUSTOM_BLOCK, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableLevelIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.LEVEL);
-        this.levelEnableFunction = enableFunction;
+        enable(IntegrationType.LEVEL, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableProtectionIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.PROTECTION);
-        this.protectionEnableFunction = enableFunction;
+        enable(IntegrationType.PROTECTION, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableShopIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.SHOP);
-        this.shopEnableFunction = enableFunction;
+        enable(IntegrationType.SHOP, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableStackerIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.STACKER);
-        this.stackerEnableFunction = enableFunction;
+        enable(IntegrationType.STACKER, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableTeamIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.TEAM);
-        this.teamEnableFunction = enableFunction;
+        enable(IntegrationType.TEAM, enableFunction);
         return this;
     }
 
     public IntegrationSetup enableVanishIntegrations(EnableFunction enableFunction) {
-        enabledTypes.add(IntegrationType.VANISH);
-        this.vanishEnableFunction = enableFunction;
+        enable(IntegrationType.VANISH, enableFunction);
         return this;
     }
 
-    public void setup() {
+    private void enable(IntegrationType integrationType, EnableFunction enableFunction) {
+        enabledTypes.add(integrationType);
+        enableFunctionMap.put(integrationType, enableFunction);
+    }
+
+    public CompletableFuture<Void> setup() {
+        CompletableFuture<Void> cf = new CompletableFuture<>();
         // run a tick later to make sure that all plugins have loaded
         Scheduler.get().runLater(() -> {
             IntegrationManager.setup(this);
+            cf.complete(null);
         }, 1);
+        return cf;
     }
 }

@@ -30,35 +30,34 @@ public class ExperienceCurrency extends CurrencyIntegration {
         return false;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         return ExperienceUtils.getExp(player);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
-        if (player == null) return CompletableFuture.completedFuture(0);
+        if (player == null) return CompletableFuture.completedFuture(0D);
         return CompletableFuture.completedFuture(getBalance(player));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return CompletableFuture.completedFuture(false);
-        ExperienceUtils.changeExp(player, amount.intValue());
+        ExperienceUtils.changeExp(player, (int) amount);
         return CompletableFuture.completedFuture(true);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return CompletableFuture.completedFuture(false);
-        ExperienceUtils.changeExp(player, -amount.intValue());
+        ExperienceUtils.changeExp(player, (int) -amount);
         return CompletableFuture.completedFuture(true);
     }
 }

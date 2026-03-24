@@ -55,37 +55,36 @@ public class UltraEconomyCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         Balance balance = getPlayerBalance(player.getUniqueId());
-        if (balance == null) return 0;
+        if (balance == null) return 0D;
         return balance.getOnHand();
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         Balance balance = getPlayerBalance(playerUUID);
-        if (balance == null) return CompletableFuture.completedFuture(0);
+        if (balance == null) return CompletableFuture.completedFuture(0D);
         return CompletableFuture.completedFuture(balance.getOnHand());
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         Balance balance = getPlayerBalance(playerUUID);
         if (balance == null) return CompletableFuture.completedFuture(false);
-        balance.addHand(amount.doubleValue());
+        balance.addHand(amount);
         return CompletableFuture.completedFuture(true);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         Balance balance = getPlayerBalance(playerUUID);
         if (balance == null) return CompletableFuture.completedFuture(false);
-        balance.removeHand(amount.doubleValue());
+        balance.removeHand(amount);
         return CompletableFuture.completedFuture(true);
     }
 

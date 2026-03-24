@@ -42,27 +42,27 @@ public class EssentialsXShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(@NotNull ItemStack item) {
+    public Double getBuyPrice(@NotNull ItemStack item) {
         return getSellPrice(item);
     }
 
     @Nullable
     @Override
-    public Number getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
         return getSellPrice(playerUUID, item);
     }
 
     @Nullable
     @Override
-    public Number getSellPrice(@NotNull ItemStack item) {
+    public Double getSellPrice(@NotNull ItemStack item) {
         BigDecimal price = worth.getPrice(api, copy(item));
         if (price == null || price.equals(negative)) return null;
-        return price.multiply(BigDecimal.valueOf(item.getAmount()));
+        return price.doubleValue() * item.getAmount();
     }
 
     @Nullable
     @Override
-    public Number getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
         return getSellPrice(item);
     }
 }

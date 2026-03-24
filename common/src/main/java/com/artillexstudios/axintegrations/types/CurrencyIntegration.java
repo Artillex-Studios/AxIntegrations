@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -48,6 +49,7 @@ public abstract class CurrencyIntegration extends Integration {
     @Override
     @NotNull
     public final String getFormattedName() {
+        if (currency == null) return getName();
         return "%s-%s".formatted(getName(), currency);
     }
 
@@ -61,15 +63,14 @@ public abstract class CurrencyIntegration extends Integration {
      * this method is just to retrieve cached balance
      * only use this to display balance, don't allow purchases just by using this
      */
-    @NotNull
-    public abstract Number getBalance(@NotNull Player player);
+    public abstract double getBalance(@NotNull Player player);
 
     @NotNull
-    public abstract CompletableFuture<Number> getBalance(@NotNull UUID playerUUID);
+    public abstract CompletableFuture<Double> getBalance(@NotNull UUID playerUUID);
 
     @NotNull
-    public abstract CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount);
+    public abstract CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount);
 
     @NotNull
-    public abstract CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount);
+    public abstract CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount);
 }

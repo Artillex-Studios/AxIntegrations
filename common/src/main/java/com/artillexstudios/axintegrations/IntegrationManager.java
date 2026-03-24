@@ -31,9 +31,10 @@ public class IntegrationManager {
     public static void reload() {
         disable();
         for (IntegrationType enabledType : setup.enabledTypes) {
+            EnableFunction enableFunction = setup.enableFunctionMap.get(enabledType);
             switch (enabledType) {
-                case CURRENCY -> reloadCurrencyIntegrations(setup.currencyEnableFunction);
-                case BACKPACK, BANK, CUSTOM_BLOCK, LEVEL, PROTECTION, SHOP, STACKER, TEAM, VANISH -> reloadGenericIntegration(enabledType, setup.shopEnableFunction);
+                case CURRENCY -> reloadCurrencyIntegrations(enableFunction);
+                case BACKPACK, BANK, CUSTOM_BLOCK, LEVEL, PROTECTION, SHOP, STACKER, TEAM, VANISH -> reloadGenericIntegration(enabledType, enableFunction);
             }
         }
         printLoaded();
@@ -74,6 +75,28 @@ public class IntegrationManager {
                 ex.printStackTrace();
             }
         }
+    }
+
+    /**
+     * returns a Map of all integration names and formatted names
+     */
+    public static Map<String, String> listAvailableIntegrations(IntegrationType type) {
+        Map<String, String> list = new HashMap<>();
+        for (Class<? extends Integration> clazz : PackageScanner.scan(type)) {
+            try {
+                Constructor<Integration> constructor = (Constructor<Integration>) clazz.getDeclaredConstructors()[0];
+                Class<?>[] paramTypes = constructor.getParameterTypes();
+                Object[] argsArray = new Object[paramTypes.length];
+                switch (type) { // apply placeholder if integration requires
+                    case CURRENCY -> argsArray[0] = "<currency>";
+                }
+                Integration integration = constructor.newInstance(argsArray);
+                list.put(integration.getName(), integration.getFormattedName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return list;
     }
 
     /**

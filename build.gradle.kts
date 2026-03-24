@@ -5,21 +5,7 @@ plugins {
 }
 
 group = "com.artillexstudios.axintegrations"
-version = "2.0.0"
-
-//dependencies {
-//    implementation(project(":common"))
-//}
-//
-//afterEvaluate {
-//    subprojects
-//        .filter { it.path.startsWith(":integrations:") }
-//        .forEach {
-//            dependencies {
-//                implementation(project(it.path))
-//            }
-//        }
-//}
+version = "6"
 
 allprojects {
     apply {
@@ -78,7 +64,7 @@ publishing {
             from(components["java"])
             groupId = "com.artillexstudios.axintegrations"
             artifactId = "AxIntegrations"
-            version = "2.0.0"
+            version = "$version"
 
             artifact(tasks.shadowJar.get())
         }

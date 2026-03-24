@@ -30,29 +30,30 @@ public class AxQuestBoardCurrency extends CurrencyIntegration {
         return true;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
+    public double getBalance(@NotNull Player player) {
         return AxQuestBoardAPI.getPoints(player.getUniqueId()); // todo: add better method
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
-        CompletableFuture<Number> cf = new CompletableFuture<>();
-        AxQuestBoardAPI.getQuestPoints(playerUUID).thenAccept(cf::complete);
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
+        CompletableFuture<Double> cf = new CompletableFuture<>();
+        AxQuestBoardAPI.getQuestPoints(playerUUID).thenAccept(integer -> {
+            cf.complete(integer.doubleValue());
+        });
         return cf;
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
-        return AxQuestBoardAPI.giveQuestPoints(playerUUID, amount.intValue());
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
+        return AxQuestBoardAPI.giveQuestPoints(playerUUID, (int) amount);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
-        return AxQuestBoardAPI.takeQuestPoints(playerUUID, amount.intValue());
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
+        return AxQuestBoardAPI.takeQuestPoints(playerUUID, (int) amount);
     }
 }

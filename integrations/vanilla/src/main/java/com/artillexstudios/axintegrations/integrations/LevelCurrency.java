@@ -29,35 +29,34 @@ public class LevelCurrency extends CurrencyIntegration {
         return false;
     }
 
-    @NotNull
     @Override
-    public Number getBalance(@NotNull Player player) {
-        return player.getLevel();
+    public double getBalance(@NotNull Player player) {
+        return (double) player.getLevel();
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Number> getBalance(@NotNull UUID playerUUID) {
+    public CompletableFuture<Double> getBalance(@NotNull UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
-        if (player == null) return CompletableFuture.completedFuture(0);
+        if (player == null) return CompletableFuture.completedFuture(0D);
         return CompletableFuture.completedFuture(getBalance(player));
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> giveBalance(@NotNull UUID playerUUID, double amount) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return CompletableFuture.completedFuture(false);
-        player.setLevel(player.getLevel() + amount.intValue());
+        player.setLevel((int) (player.getLevel() + amount));
         return CompletableFuture.completedFuture(true);
     }
 
     @NotNull
     @Override
-    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, @NotNull Number amount) {
+    public CompletableFuture<Boolean> takeBalance(@NotNull UUID playerUUID, double amount) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return CompletableFuture.completedFuture(false);
-        player.setLevel(player.getLevel() - amount.intValue());
+        player.setLevel((int) (player.getLevel() - amount));
         return CompletableFuture.completedFuture(true);
     }
 }

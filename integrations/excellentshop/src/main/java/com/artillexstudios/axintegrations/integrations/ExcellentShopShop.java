@@ -40,7 +40,7 @@ public class ExcellentShopShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(@NotNull ItemStack item) {
+    public Double getBuyPrice(@NotNull ItemStack item) {
         VirtualProduct product = module.getBestProductFor(copy(item), TradeType.BUY);
         if (product == null) return null;
         return product.getFinalPrice(TradeType.BUY, item.getAmount());
@@ -48,7 +48,7 @@ public class ExcellentShopShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getBuyPrice(UUID playerUUID, @NotNull ItemStack item) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return getBuyPrice(item);
         VirtualProduct product = module.getBestProductFor(copy(item), TradeType.BUY, player);
@@ -58,7 +58,7 @@ public class ExcellentShopShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(@NotNull ItemStack item) {
+    public Double getSellPrice(@NotNull ItemStack item) {
         VirtualProduct product = module.getBestProductFor(copy(item), TradeType.SELL);
         if (product == null) return null;
         return product.getFinalPrice(TradeType.SELL, item.getAmount());
@@ -66,7 +66,7 @@ public class ExcellentShopShop extends ShopIntegration {
 
     @Nullable
     @Override
-    public Number getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
+    public Double getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
         Player player = Bukkit.getPlayer(playerUUID);
         if (player == null) return getSellPrice(item);
         VirtualProduct product = module.getBestProductFor(copy(item), TradeType.SELL, player);
