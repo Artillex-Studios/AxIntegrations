@@ -87,8 +87,10 @@ public class IntegrationManager {
                 Constructor<Integration> constructor = (Constructor<Integration>) clazz.getDeclaredConstructors()[0];
                 Class<?>[] paramTypes = constructor.getParameterTypes();
                 Object[] argsArray = new Object[paramTypes.length];
-                switch (type) { // apply placeholder if integration requires
-                    case CURRENCY -> argsArray[0] = "<currency>";
+                if (argsArray.length > 0) {
+                    switch (type) { // apply placeholder if integration requires
+                        case CURRENCY -> argsArray[0] = "<currency>";
+                    }
                 }
                 Integration integration = constructor.newInstance(argsArray);
                 list.put(integration.getName(), integration.getFormattedName());
