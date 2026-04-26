@@ -42,6 +42,11 @@ public class EssentialsXVanish extends VanishIntegration {
     }
 
     @Override
+    public boolean canVanish(@NotNull Player player) {
+        return player.hasPermission("essentials.vanish");
+    }
+
+    @Override
     public void showPlayer(@NotNull Player player) {
         User user = getUser(player);
         if (user == null) return;
@@ -59,7 +64,22 @@ public class EssentialsXVanish extends VanishIntegration {
     public boolean canSee(@NotNull Player viewer, @NotNull Player viewed) {
         User viewedUser = getUser(viewed);
         if (viewedUser == null) return true;
-        return !viewedUser.isHiddenFrom(viewed);
+        return !viewedUser.isHiddenFrom(viewer);
+    }
+
+    @Override
+    public boolean canPickup(@NotNull Player player) {
+        return player.hasPermission("essentials.vanish.pickup");
+    }
+
+    @Override
+    public int getVanishPriority(@NotNull Player player) {
+        return canVanish(player) ? 1 : 0;
+    }
+
+    @Override
+    public int getViewPriority(@NotNull Player player) {
+        return canVanish(player) ? 1 : 0;
     }
 
     @Nullable

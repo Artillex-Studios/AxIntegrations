@@ -12,7 +12,12 @@ import java.util.List;
 /**
  * Rules
  * - if the plugin can't answer {@link this#isVanished(Player)}, return false
+ * - if the plugin can't answer {@link this#canVanish(Player)} (Player, Player)}, return false
  * - if the plugin can't answer {@link this#canSee(Player, Player)}, return true
+ * - if the plugin can't answer {@link this#canPickup(Player)}, return true
+ * - the {@link this#getVanishPriority(Player)} and {@link this#getViewPriority(Player)} must return a higher number for higher priority and it should return 0 if the player can't vanish
+ * - if the plugin doesn't have vanish or view priorities, return 1 if {@link this#canVanish(Player)} is true otherwise 0
+ * - if the plugin doesn't have a different priority for vanish and view, return the same priority for both
  */
 public abstract class VanishIntegration extends Integration {
 
@@ -45,6 +50,24 @@ public abstract class VanishIntegration extends Integration {
         return false;
     }
 
+    public static boolean canPlayerVanish(@NotNull Player player) {
+        for (VanishIntegration integration : list()) {
+            if (integration.canVanish(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean canPlayerPickup(@NotNull Player player) {
+        for (VanishIntegration integration : list()) {
+            if (integration.canPickup(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean canPlayerSee(@NotNull Player viewer, @NotNull Player viewed) {
         for (VanishIntegration integration : list()) {
             if (!integration.canSee(viewer, viewed)) {
@@ -54,11 +77,47 @@ public abstract class VanishIntegration extends Integration {
         return true;
     }
 
+    public enum PriorityType {
+        VANISH,
+        VIEW
+    }
+
+    public static int getPlayerPriority(@NotNull Player player, @NotNull PriorityType priorityType) {
+        return switch (priorityType) {
+            case VANISH -> getPlayerVanishPriority(player);
+            case VIEW -> getPlayerViewPriority(player);
+        };
+    }
+
+    public static int getPlayerVanishPriority(@NotNull Player player) {
+        int value = 0;
+        for (VanishIntegration integration : list()) {
+            value = Math.max(value, integration.getVanishPriority(player));
+        }
+        return value;
+    }
+
+    public static int getPlayerViewPriority(@NotNull Player player) {
+        int value = 0;
+        for (VanishIntegration integration : list()) {
+            value = Math.max(value, integration.getViewPriority(player));
+        }
+        return value;
+    }
+
     public abstract boolean isVanished(@NotNull Player player);
+
+    public abstract boolean canVanish(@NotNull Player player);
 
     public abstract void showPlayer(@NotNull Player player);
 
     public abstract void hidePlayer(@NotNull Player player);
 
     public abstract boolean canSee(@NotNull Player viewer, @NotNull Player viewed);
+
+    public abstract boolean canPickup(@NotNull Player player);
+
+    public abstract int getVanishPriority(@NotNull Player player);
+
+    public abstract int getViewPriority(@NotNull Player player);
 }

@@ -1,4 +1,4 @@
-package com.artillexstudios.axintegrations.integrations.helpers;
+package com.artillexstudios.axintegrations.integrations;
 
 import com.artillexstudios.axapi.reflection.ClassUtils;
 import com.artillexstudios.axintegrations.events.IntegrationEvents;
@@ -11,11 +11,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class SuperPremiumVanishHelper extends VanishIntegration implements Listener {
+import java.lang.reflect.Method;
 
-    public SuperPremiumVanishHelper(String name) {
+public class PremiumVanishVanish extends VanishIntegration implements Listener {
+    private JavaPlugin instance;
+
+    public PremiumVanishVanish(String name) {
         super(name);
     }
 
@@ -27,6 +31,8 @@ public class SuperPremiumVanishHelper extends VanishIntegration implements Liste
 
     @Override
     public boolean setup() {
+        instance = (JavaPlugin) Bukkit.getPluginManager().getPlugin(name);
+        if (instance == null) return false;
         registerListener();
         return true;
     }
@@ -53,6 +59,11 @@ public class SuperPremiumVanishHelper extends VanishIntegration implements Liste
     }
 
     @Override
+    public boolean canVanish(@NotNull Player player) {
+        return player.hasPermission("");
+    }
+
+    @Override
     public void showPlayer(@NotNull Player player) {
         VanishAPI.showPlayer(player);
     }
@@ -66,4 +77,29 @@ public class SuperPremiumVanishHelper extends VanishIntegration implements Liste
     public boolean canSee(@NotNull Player viewer, @NotNull Player viewed) {
         return VanishAPI.canSee(viewer, viewed);
     }
+
+    @Override
+    public boolean canPickup(@NotNull Player player) {
+        try {
+            // some methods are not exposed in the api, so we use reflection to call them
+            Method method = instance.getClass().getMethod("getVanishPlayer", Player.class);
+            Object vanishPlayer = method.invoke(instance, player);
+            if (vanishPlayer == null) return true;
+            Method method2 = vanishPlayer.getClass().getMethod("hasItemPickUpsEnabled");
+            return (boolean) method2.invoke(vanishPlayer);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return true;
     }
+
+    @Override
+    public int getVanishPriority(@NotNull Player player) {
+        return VanishAPI.getLayeredUsePermissionLevel(player);
+    }
+
+    @Override
+    public int getViewPriority(@NotNull Player player) {
+        return VanishAPI.getLayeredSeePermissionLevel(player);
+    }
+}
