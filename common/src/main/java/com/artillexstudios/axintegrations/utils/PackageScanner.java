@@ -21,7 +21,7 @@ public class PackageScanner {
                 String path = "com.artillexstudios.axintegrations.integrations".replace('.', '/');
 
                 jar.stream()
-                        .filter(e -> e.getName().endsWith(".class") && e.getName().startsWith(path))
+                        .filter(e -> e.getName().endsWith(".class") && e.getName().startsWith(path) && !e.getName().contains("helper"))
                         .forEach(e -> {
                             String className = e.getName().replace('/', '.').replace(".class", "");
                             try {

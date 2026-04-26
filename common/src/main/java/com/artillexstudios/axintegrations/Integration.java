@@ -1,13 +1,15 @@
 package com.artillexstudios.axintegrations;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public abstract class Integration {
-    private final String name;
-    private final IntegrationType type;
+    protected final String name;
+    protected final IntegrationType type;
 
     protected Integration(@NotNull String name, @NotNull IntegrationType type) {
         this.name = name;
@@ -51,6 +53,16 @@ public abstract class Integration {
 
     public void disable() {
 
+    }
+
+    public void registerListener() {
+        if (!(this instanceof Listener listener)) return;
+        Bukkit.getServer().getPluginManager().registerEvents(listener, IntegrationManager.getPlugin());
+    }
+
+    public void unregisterListener() {
+        if (!(this instanceof Listener listener)) return;
+        HandlerList.unregisterAll(listener);
     }
 
     @Override

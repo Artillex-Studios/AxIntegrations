@@ -4,6 +4,7 @@ import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axintegrations.functions.EnableFunction;
 import com.artillexstudios.axintegrations.utils.PackageScanner;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -17,14 +18,24 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public class IntegrationManager {
+    private static JavaPlugin plugin;
     private static final Map<IntegrationType, List<? extends Integration>> integrations = new HashMap<>();
     private static IntegrationSetup setup;
+
+    public static JavaPlugin getPlugin() {
+        return plugin;
+    }
+
+    public static void setPlugin(JavaPlugin plugin) {
+        IntegrationManager.plugin = plugin;
+    }
 
     /**
      * used to set the types of integrations that should be loaded
      */
     protected static void setup(IntegrationSetup setup) {
         IntegrationManager.setup = setup;
+        IntegrationManager.plugin = setup.javaPlugin;
         reload();
     }
 

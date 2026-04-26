@@ -36,22 +36,22 @@ public class AxGensLevel extends LevelIntegration {
     }
 
     @Override
-    public long getLevel(@NotNull UUID player) {
-        return AxGensAPI.getLevel(player);
+    public long getLevel(@NotNull UUID playerUUID) {
+        return AxGensAPI.getLevel(playerUUID);
     }
 
     @Override
-    public double getXP(@NotNull UUID player) {
+    public double getXP(@NotNull UUID playerUUID) {
         return 0;
     }
 
     @Override
-    public double getRequiredXP(@NotNull UUID player) {
+    public double getRequiredXP(@NotNull UUID playerUUID) {
         return 0;
     }
 
     @Override
-    public double getRemainingXP(@NotNull UUID player) {
+    public double getRemainingXP(@NotNull UUID playerUUID) {
         return 0;
     }
 

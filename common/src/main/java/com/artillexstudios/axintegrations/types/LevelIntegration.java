@@ -36,26 +36,26 @@ public abstract class LevelIntegration extends Integration {
         super(name, IntegrationType.LEVEL);
     }
 
-    public abstract long getLevel(@NotNull UUID player);
+    public abstract long getLevel(@NotNull UUID playerUUID);
 
-    public abstract double getXP(@NotNull UUID player);
+    public abstract double getXP(@NotNull UUID playerUUID);
 
     /**
      * required xp for the next level
      */
-    public abstract double getRequiredXP(@NotNull UUID player);
+    public abstract double getRequiredXP(@NotNull UUID playerUUID);
 
     /**
-     * the amount of xp the player needs to get to level up
+     * the amount of xp the playerUUID needs to get to level up
      */
-    public abstract double getRemainingXP(@NotNull UUID player);
+    public abstract double getRemainingXP(@NotNull UUID playerUUID);
 
     /**
      * reset level and xp
      */
-    public CompletableFuture<Boolean> reset(@NotNull UUID player) {
-        setXP(player, 0);
-        return setLevel(player, 0);
+    public CompletableFuture<Boolean> reset(@NotNull UUID playerUUID) {
+        setXP(playerUUID, 0);
+        return setLevel(playerUUID, 0);
     }
 
     public abstract CompletableFuture<Boolean> setLevel(@NotNull UUID playerUUID, long amount);

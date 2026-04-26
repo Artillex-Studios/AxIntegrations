@@ -29,23 +29,23 @@ public class AxHoesLevel extends LevelIntegration {
     }
 
     @Override
-    public long getLevel(@NotNull UUID player) {
-        return api.getLevel(player);
+    public long getLevel(@NotNull UUID playerUUID) {
+        return api.getLevel(playerUUID);
     }
 
     @Override
-    public double getXP(@NotNull UUID player) {
-        return api.getLevel(player);
+    public double getXP(@NotNull UUID playerUUID) {
+        return api.getLevel(playerUUID);
     }
 
     @Override
-    public double getRequiredXP(@NotNull UUID player) {
-        return api.getRequiredXP(player);
+    public double getRequiredXP(@NotNull UUID playerUUID) {
+        return api.getRequiredXP(playerUUID);
     }
 
     @Override
-    public double getRemainingXP(@NotNull UUID player) {
-        return api.getRemainingXP(player);
+    public double getRemainingXP(@NotNull UUID playerUUID) {
+        return api.getRemainingXP(playerUUID);
     }
 
     @Override
