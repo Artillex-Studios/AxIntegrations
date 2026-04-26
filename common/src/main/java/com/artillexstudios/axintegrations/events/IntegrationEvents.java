@@ -1,7 +1,7 @@
 package com.artillexstudios.axintegrations.events;
 
 import com.artillexstudios.axintegrations.events.impl.IntegrationEvent;
-import com.artillexstudios.axintegrations.events.impl.VanishEvent;
+import com.artillexstudios.axintegrations.events.impl.PlayerVanishChangeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class IntegrationEvents {
     public static void callEvent(IntegrationEvent integrationEvent) {
         for (IntegrationAdapter adapter : adapters) {
             switch (integrationEvent) {
-                case VanishEvent event -> adapter.onVanish(event);
+                case PlayerVanishChangeEvent event -> adapter.onVanish(event);
                 default -> {}
             }
         }

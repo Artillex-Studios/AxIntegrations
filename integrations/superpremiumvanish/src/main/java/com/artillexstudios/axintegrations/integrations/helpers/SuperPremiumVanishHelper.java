@@ -2,7 +2,7 @@ package com.artillexstudios.axintegrations.integrations.helpers;
 
 import com.artillexstudios.axapi.reflection.ClassUtils;
 import com.artillexstudios.axintegrations.events.IntegrationEvents;
-import com.artillexstudios.axintegrations.events.impl.VanishEvent;
+import com.artillexstudios.axintegrations.events.impl.PlayerVanishChangeEvent;
 import com.artillexstudios.axintegrations.types.VanishIntegration;
 import de.myzelyam.api.vanish.PlayerVanishStateChangeEvent;
 import de.myzelyam.api.vanish.VanishAPI;
@@ -44,7 +44,7 @@ public class SuperPremiumVanishHelper extends VanishIntegration implements Liste
     public void onChange(PlayerVanishStateChangeEvent event) {
         Player player = Bukkit.getPlayer(event.getUUID());
         if (player == null) return;
-        IntegrationEvents.callEvent(new VanishEvent(this, player, event.isVanishing()));
+        IntegrationEvents.callEvent(new PlayerVanishChangeEvent(this, player, event.isVanishing()));
     }
 
     @Override

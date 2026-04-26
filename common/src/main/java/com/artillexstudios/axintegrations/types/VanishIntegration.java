@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Rules
- * -
+ * - if the plugin can't answer {@link this#isVanished(Player)}, return false
+ * - if the plugin can't answer {@link this#canSee(Player, Player)}, return true
  */
 public abstract class VanishIntegration extends Integration {
 
@@ -34,6 +34,24 @@ public abstract class VanishIntegration extends Integration {
 
     public VanishIntegration(String name) {
         super(name, IntegrationType.VANISH);
+    }
+
+    public static boolean isPlayerVanished(@NotNull Player player) {
+        for (VanishIntegration integration : list()) {
+            if (integration.isVanished(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean canPlayerSee(@NotNull Player viewer, @NotNull Player viewed) {
+        for (VanishIntegration integration : list()) {
+            if (!integration.canSee(viewer, viewed)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public abstract boolean isVanished(@NotNull Player player);

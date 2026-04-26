@@ -36,6 +36,24 @@ public abstract class CustomBlockIntegration extends Integration {
         super(name, IntegrationType.CUSTOM_BLOCK);
     }
 
+    public static boolean isBlockCustom(@NotNull String itemId) {
+        for (CustomBlockIntegration integration : list()) {
+            if (integration.isCustomBlock(itemId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isBlockCustom(@NotNull Location location) {
+        for (CustomBlockIntegration integration : list()) {
+            if (integration.isCustomBlock(location)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public abstract boolean isCustomBlock(@NotNull String itemId);
 
     public abstract boolean isCustomBlock(@NotNull Location location);

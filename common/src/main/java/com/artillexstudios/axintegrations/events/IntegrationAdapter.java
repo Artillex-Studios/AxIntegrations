@@ -1,6 +1,6 @@
 package com.artillexstudios.axintegrations.events;
 
-import com.artillexstudios.axintegrations.events.impl.VanishEvent;
+import com.artillexstudios.axintegrations.events.impl.PlayerVanishChangeEvent;
 
 public abstract class IntegrationAdapter {
 
@@ -12,5 +12,5 @@ public abstract class IntegrationAdapter {
         IntegrationEvents.unregister(this);
     }
 
-    public void onVanish(VanishEvent event) {}
+    public void onVanish(PlayerVanishChangeEvent event) {}
 }
