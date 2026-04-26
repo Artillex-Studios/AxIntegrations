@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @SuppressWarnings("unchecked")
 public class IntegrationManager {
     private static JavaPlugin plugin;
@@ -150,9 +151,9 @@ public class IntegrationManager {
             print(true, "Loaded %s integrations: %s".formatted(
                     type.name().toLowerCase(Locale.ENGLISH),
                     integrations.isEmpty() ? "---" : integrations
-                            .stream()
-                            .map(Integration::getFormattedName)
-                            .collect(Collectors.joining(", "))
+                                                     .stream()
+                                                     .map(Integration::getFormattedName)
+                                                     .collect(Collectors.joining(", "))
             ));
         }
     }

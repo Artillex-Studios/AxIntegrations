@@ -21,6 +21,10 @@ public class IntegrationEvents {
         return adapters;
     }
 
+    public static void unregisterAll() {
+        adapters.clear();
+    }
+
     public static void callEvent(IntegrationEvent integrationEvent) {
         for (IntegrationAdapter adapter : adapters) {
             switch (integrationEvent) {
