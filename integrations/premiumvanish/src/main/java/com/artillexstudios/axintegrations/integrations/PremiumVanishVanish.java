@@ -19,8 +19,8 @@ import java.lang.reflect.Method;
 public class PremiumVanishVanish extends VanishIntegration implements Listener {
     private JavaPlugin instance;
 
-    public PremiumVanishVanish(String name) {
-        super(name);
+    public PremiumVanishVanish() {
+        super("PremiumVanish");
     }
 
     @Override

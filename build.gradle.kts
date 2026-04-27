@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.artillexstudios.axintegrations"
-version = "11"
+version = "12"
 
 allprojects {
     apply {

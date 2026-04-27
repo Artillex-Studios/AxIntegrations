@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 public class SuperVanishVanish extends VanishIntegration implements Listener {
     private SuperVanish instance;
 
-    public SuperVanishVanish(String name) {
-        super(name);
+    public SuperVanishVanish() {
+        super("SuperVanish");
     }
 
     @Override
