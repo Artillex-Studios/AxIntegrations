@@ -104,11 +104,11 @@ public class IntegrationSetup {
      * finishes up the setup and locks the integration registry
      */
     public void setup() {
-        AxIntegrationsLoadEvent event = new AxIntegrationsLoadEvent();
-        Bukkit.getPluginManager().callEvent(event);
-        if (runAfterLoad != null) runAfterLoad.run();
         // run a tick later to make sure that all plugins have loaded
         Scheduler.get().runLater(() -> {
+            AxIntegrationsLoadEvent event = new AxIntegrationsLoadEvent();
+            Bukkit.getPluginManager().callEvent(event);
+            if (runAfterLoad != null) runAfterLoad.run();
             IntegrationManager.setup(this);
             if (runAfterSetup != null) runAfterSetup.run();
         }, 1);
