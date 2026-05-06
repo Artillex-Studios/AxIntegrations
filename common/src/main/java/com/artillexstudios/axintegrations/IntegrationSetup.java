@@ -1,21 +1,24 @@
 package com.artillexstudios.axintegrations;
 
 import com.artillexstudios.axapi.scheduler.Scheduler;
+import com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent;
 import com.artillexstudios.axintegrations.functions.CurrencySetupFunction;
 import com.artillexstudios.axintegrations.functions.EnableFunction;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class IntegrationSetup {
     protected JavaPlugin javaPlugin;
     protected final List<IntegrationType> enabledTypes = new ArrayList<>();
     protected Map<IntegrationType, EnableFunction> enableFunctionMap = new HashMap<>();
     protected CurrencySetupFunction currencySetupFunction;
+    protected Runnable runAfterLoad;
+    protected Runnable runAfterSetup;
 
     protected IntegrationSetup() {}
 
@@ -81,13 +84,33 @@ public class IntegrationSetup {
         enableFunctionMap.put(integrationType, enableFunction);
     }
 
-    public CompletableFuture<Void> setup() {
-        CompletableFuture<Void> cf = new CompletableFuture<>();
+    /**
+     * @param runAfterLoad called before the setup is finished, but after the {@link AxIntegrationsLoadEvent} is called, it's recommended to generate configuration or to list integrations at this point
+     */
+    public IntegrationSetup runAfterLoad(Runnable runAfterLoad) {
+        this.runAfterLoad = runAfterLoad;
+        return this;
+    }
+
+    /**
+     * @param runAfterSetup called after the {@link AxIntegrationsLoadEvent} finishes, at this point everything is ready and functional
+     */
+    public IntegrationSetup runAfterSetup(Runnable runAfterSetup) {
+        this.runAfterSetup = runAfterSetup;
+        return this;
+    }
+
+    /**
+     * finishes up the setup and locks the integration registry
+     */
+    public void setup() {
+        AxIntegrationsLoadEvent event = new AxIntegrationsLoadEvent();
+        Bukkit.getPluginManager().callEvent(event);
+        if (runAfterLoad != null) runAfterLoad.run();
         // run a tick later to make sure that all plugins have loaded
         Scheduler.get().runLater(() -> {
             IntegrationManager.setup(this);
-            cf.complete(null);
+            if (runAfterSetup != null) runAfterSetup.run();
         }, 1);
-        return cf;
     }
 }

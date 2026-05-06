@@ -1,6 +1,9 @@
 package com.artillexstudios.axintegrations;
 
 import com.artillexstudios.axapi.utils.StringUtils;
+import com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent;
+import com.artillexstudios.axintegrations.api.events.AxIntegrationsReloadEvent;
+import com.artillexstudios.axintegrations.exceptions.IntegrationsLockedException;
 import com.artillexstudios.axintegrations.functions.EnableFunction;
 import com.artillexstudios.axintegrations.utils.PackageScanner;
 import org.bukkit.Bukkit;
@@ -16,12 +19,37 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 @SuppressWarnings("unchecked")
 public class IntegrationManager {
     private static JavaPlugin plugin;
-    private static final Map<IntegrationType, List<? extends Integration>> integrations = new HashMap<>();
+    private static final Map<IntegrationType, List<? extends Integration>> registeredIntegrations = new HashMap<>();
     private static IntegrationSetup setup;
+    // can new integrations be registered?
+    private static boolean locked = false;
+    private static final Map<IntegrationType, List<Class<? extends Integration>>> providedIntegrations = new HashMap<>();
+
+    public static <T extends Integration> void provideIntegration(Class<T> integration) {
+        if (locked) throw new IntegrationsLockedException("The integration manager is locked. Please register your integrations by listening to AxIntegrationsLoadEvent.");
+
+        IntegrationType type = null;
+        for (IntegrationType integrationType : IntegrationType.values()) {
+            if (!integrationType.getClazz().isAssignableFrom(integration)) continue;
+            type = integrationType;
+            break;
+        }
+        if (type == null) {
+            throw new RuntimeException("Invalid integration type!");
+        }
+
+        List<Class<? extends Integration>> list = providedIntegrations.computeIfAbsent(type, i -> new ArrayList<>());
+        list.add(integration);
+    }
+
+    public static <T extends Integration> void registerIntegration(T integration) {
+        if (locked) throw new IntegrationsLockedException("The integration manager is locked. Please register your integrations by listening to AxIntegrationsLoadEvent.");
+        List<T> list = (List<T>) registeredIntegrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
+        list.add(integration);
+    }
 
     public static JavaPlugin getPlugin() {
         return plugin;
@@ -37,11 +65,23 @@ public class IntegrationManager {
     protected static void setup(IntegrationSetup setup) {
         IntegrationManager.setup = setup;
         IntegrationManager.plugin = setup.javaPlugin;
-        reload();
+        IntegrationManager.locked = true;
+        reload(true);
     }
 
+
     public static void reload() {
-        disable();
+        reload(false);
+    }
+
+    private static void reload(boolean startup) {
+        if (!startup) {
+            disable();
+            locked = false;
+            AxIntegrationsReloadEvent event = new AxIntegrationsReloadEvent();
+            Bukkit.getPluginManager().callEvent(event);
+            locked = true;
+        }
         for (IntegrationType enabledType : setup.enabledTypes) {
             EnableFunction enableFunction = setup.enableFunctionMap.get(enabledType);
             switch (enabledType) {
@@ -56,8 +96,14 @@ public class IntegrationManager {
         return setup.enabledTypes;
     }
 
+    private static List<Class<? extends Integration>> fetchIntegrations(IntegrationType type) {
+        List<Class<? extends Integration>> list = PackageScanner.scan(type);
+        list.addAll(providedIntegrations.getOrDefault(type, List.of()));
+        return list;
+    }
+
     private static void reloadCurrencyIntegrations(EnableFunction function) {
-        for (Class<? extends Integration> clazz : PackageScanner.scan(IntegrationType.CURRENCY)) {
+        for (Class<? extends Integration> clazz : fetchIntegrations(IntegrationType.CURRENCY)) {
             try {
                 Constructor<Integration> constructor = (Constructor<Integration>) clazz.getDeclaredConstructor(String.class);
                 Integration instance = constructor.newInstance((Object) null);
@@ -79,7 +125,7 @@ public class IntegrationManager {
     }
 
     private static void reloadGenericIntegration(IntegrationType type, EnableFunction function) {
-        for (Class<? extends Integration> clazz : PackageScanner.scan(type)) {
+        for (Class<? extends Integration> clazz : fetchIntegrations(type)) {
             try {
                 Constructor<Integration> constructor = (Constructor<Integration>) clazz.getDeclaredConstructor();
                 loadIntegration(constructor.newInstance(), function);
@@ -89,12 +135,9 @@ public class IntegrationManager {
         }
     }
 
-    /**
-     * returns a Map of all integration names and formatted names
-     */
     public static Map<String, String> listAvailableIntegrations(IntegrationType type) {
         Map<String, String> list = new HashMap<>();
-        for (Class<? extends Integration> clazz : PackageScanner.scan(type)) {
+        for (Class<? extends Integration> clazz : fetchIntegrations(type)) {
             try {
                 Constructor<Integration> constructor = (Constructor<Integration>) clazz.getDeclaredConstructors()[0];
                 Class<?>[] paramTypes = constructor.getParameterTypes();
@@ -113,13 +156,10 @@ public class IntegrationManager {
         return list;
     }
 
-    /**
-     * returns all loaded integrations by the class
-     */
     public static <T extends Integration> List<T> getIntegrations(Class<T> clazz) {
         for (IntegrationType value : IntegrationType.values()) {
             if (!value.getClazz().equals(clazz)) continue;
-            return Collections.unmodifiableList((List<T>) integrations.getOrDefault(value, new ArrayList<>()));
+            return Collections.unmodifiableList((List<T>) registeredIntegrations.getOrDefault(value, new ArrayList<>()));
         }
         throw new RuntimeException("Invalid class");
     }
@@ -129,7 +169,7 @@ public class IntegrationManager {
             if (!integration.canLoad()) return;
             if (!function.isEnabled(integration.getName())) return;
             if (!integration.setup()) return;
-            List<T> list = (List<T>) integrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
+            List<T> list = (List<T>) registeredIntegrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
             list.add(integration);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -137,16 +177,16 @@ public class IntegrationManager {
     }
 
     public static void disable() {
-        for (List<? extends Integration> list : integrations.values()) {
+        for (List<? extends Integration> list : registeredIntegrations.values()) {
             for (Iterator<? extends Integration> it = list.iterator(); it.hasNext(); ) {
                 Integration integration = it.next();
                 integration.disable();
-                // don't remove third party hooks as it is controlled externally
+                // don't remove third party hooks as they are controlled externally
                 if (!integration.isBuiltin()) continue;
                 it.remove();
             }
         }
-        integrations.clear();
+        registeredIntegrations.clear();
     }
 
     private static void printLoaded() {
