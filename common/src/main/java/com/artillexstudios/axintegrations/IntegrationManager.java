@@ -125,11 +125,15 @@ public class IntegrationManager {
     }
 
     private static <T extends Integration> void loadIntegration(T integration, EnableFunction function) {
-        if (!integration.canLoad()) return;
-        if (!function.isEnabled(integration.getName())) return;
-        if (!integration.setup()) return;
-        List<T> list = (List<T>) integrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
-        list.add(integration);
+        try {
+            if (!integration.canLoad()) return;
+            if (!function.isEnabled(integration.getName())) return;
+            if (!integration.setup()) return;
+            List<T> list = (List<T>) integrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
+            list.add(integration);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static void disable() {

@@ -14,10 +14,10 @@ import su.nightexpress.nexshop.shop.virtual.impl.VirtualProduct;
 
 import java.util.UUID;
 
-public class ExcellentShopShop extends ShopIntegration {
+public class ExcellentShop4Shop extends ShopIntegration {
     private VirtualShopModule module;
 
-    public ExcellentShopShop() {
+    public ExcellentShop4Shop() {
         super("ExcellentShop");
     }
 
