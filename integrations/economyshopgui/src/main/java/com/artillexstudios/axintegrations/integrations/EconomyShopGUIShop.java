@@ -6,12 +6,14 @@ import me.gypopo.economyshopgui.api.EconomyShopGUIHook;
 import me.gypopo.economyshopgui.api.objects.BuyPrice;
 import me.gypopo.economyshopgui.api.objects.SellPrice;
 import me.gypopo.economyshopgui.objects.ShopItem;
+import me.gypopo.economyshopgui.util.EcoType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class EconomyShopGUIShop extends ShopIntegration {
@@ -44,7 +46,10 @@ public class EconomyShopGUIShop extends ShopIntegration {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         BuyPrice price = EconomyShopGUIHook.getBuyPrice(player, copy(item)).orElse(null);
         if (price == null) return null;
-        return (double) (price.getAmount() * item.getAmount());
+        for (Map.Entry<EcoType, Double> entry : price.getPrices().entrySet()) {
+            return entry.getValue() * item.getAmount();
+        }
+        return null;
     }
 
     @Nullable
@@ -61,6 +66,9 @@ public class EconomyShopGUIShop extends ShopIntegration {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         SellPrice price = EconomyShopGUIHook.getSellPrice(player, copy(item)).orElse(null);
         if (price == null) return null;
-        return (double) (price.getAmount() * item.getAmount());
+        for (Map.Entry<EcoType, Double> entry : price.getPrices().entrySet()) {
+            return entry.getValue() * item.getAmount();
+        }
+        return null;
     }
 }
