@@ -35,9 +35,11 @@ public class EconomyShopGUIShop extends ShopIntegration {
     @Nullable
     @Override
     public Double getBuyPrice(@NotNull ItemStack item) {
-        Double price = EconomyShopGUIHook.getItemBuyPrice(copy(item));
-        if (price == null) return null;
-        return price * item.getAmount();
+        ShopItem shopItem = EconomyShopGUIHook.getShopItem(copy(item));
+        if (shopItem == null) return null;
+        double price = EconomyShopGUIHook.getItemBuyPrice(shopItem, 1) * item.getAmount();
+        if (price <= 0) return null;
+        return price;
     }
 
     @Nullable
@@ -55,9 +57,10 @@ public class EconomyShopGUIShop extends ShopIntegration {
     @Nullable
     @Override
     public Double getSellPrice(@NotNull ItemStack item) {
-        ShopItem shopItem = EconomyShopGUIHook.getShopItem(copy(item));
+        ItemStack copy = copy(item);
+        ShopItem shopItem = EconomyShopGUIHook.getShopItem(copy);
         if (shopItem == null) return null;
-        return EconomyShopGUIHook.getItemSellPrice(shopItem, copy(item)) * item.getAmount();
+        return EconomyShopGUIHook.getItemSellPrice(shopItem, copy) * item.getAmount();
     }
 
     @Nullable

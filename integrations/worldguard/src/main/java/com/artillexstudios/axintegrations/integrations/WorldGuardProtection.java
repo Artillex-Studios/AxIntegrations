@@ -44,14 +44,14 @@ public class WorldGuardProtection extends ProtectionIntegration {
 
     @Override
     public boolean canPlace(@NotNull Player player, @NotNull Location location) {
-        if (!testState(player, location, Flags.BUILD)) return false;
-        return testState(player, location, Flags.BLOCK_PLACE);
+        if (testState(player, location, Flags.BLOCK_PLACE)) return true;
+        return testState(player, location, Flags.BUILD);
     }
 
     @Override
     public boolean canBreak(@NotNull Player player, @NotNull Location location) {
-        if (!testState(player, location, Flags.BUILD)) return false;
-        return testState(player, location, Flags.BLOCK_BREAK);
+        if (testState(player, location, Flags.BLOCK_BREAK)) return true;
+        return testState(player, location, Flags.BUILD);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class WorldGuardProtection extends ProtectionIntegration {
         LocalPlayer localPlayer = pluginInstance.wrapPlayer(player);
         World world = BukkitAdapter.adapt(player.getWorld());
 
-        final boolean canBypass = platform.getSessionManager().hasBypass(localPlayer, world);
+        boolean canBypass = platform.getSessionManager().hasBypass(localPlayer, world);
         if (canBypass) return true;
 
         RegionContainer container = platform.getRegionContainer();
