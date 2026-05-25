@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.artillexstudios.axintegrations"
-version = "17"
+version = "18"
 
 allprojects {
     apply {
@@ -21,7 +21,7 @@ allprojects {
 
     dependencies {
         compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
-        compileOnly("com.artillexstudios.axapi:axapi:1.4.840:all")
+        compileOnly("com.artillexstudios.axapi:axapi:2.1.0-DEV-31:all")
     }
 }
 
