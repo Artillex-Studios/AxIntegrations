@@ -2,20 +2,21 @@ package com.artillexstudios.axintegrations.integrations;
 
 import com.artillexstudios.axapi.reflection.ClassUtils;
 import com.artillexstudios.axintegrations.types.ProtectionIntegration;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import com.griefprevention.protection.ProtectionHelper;
+import me.ryanhamshire.GriefPrevention.ClaimPermission;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class GriefPreventionProtection extends ProtectionIntegration {
+public class GriefPrevention3DProtection extends ProtectionIntegration {
 
-    public GriefPreventionProtection() {
+    public GriefPrevention3DProtection() {
         super("GriefPrevention");
     }
 
     @Override
     public boolean canLoad() {
-        return ClassUtils.INSTANCE.classExists("me.ryanhamshire.GriefPrevention.GriefPrevention");
+        return ClassUtils.INSTANCE.classExists("com.griefprevention.protection.ProtectionHelper");
     }
 
     @Override
@@ -25,25 +26,25 @@ public class GriefPreventionProtection extends ProtectionIntegration {
 
     @Override
     public boolean canPlace(@NotNull Player player, @NotNull Location location) {
-        return isAllowed(player, location);
+        return isAllowed(player, location, ClaimPermission.Build);
     }
 
     @Override
     public boolean canBreak(@NotNull Player player, @NotNull Location location) {
-        return isAllowed(player, location);
+        return isAllowed(player, location, ClaimPermission.Build);
     }
 
     @Override
     public boolean canInteract(@NotNull Player player, @NotNull Location location) {
-        return isAllowed(player, location);
+        return isAllowed(player, location, ClaimPermission.Build);
     }
 
     @Override
     public boolean canOpenContainer(@NotNull Player player, @NotNull Location location) {
-        return isAllowed(player, location);
+        return isAllowed(player, location, ClaimPermission.Inventory);
     }
 
-    private boolean isAllowed(Player player, Location location) {
-        return GriefPrevention.instance.allowBuild(player, location) == null; // todo: use permissions?
+    private boolean isAllowed(Player player, Location location, ClaimPermission permission) {
+        return ProtectionHelper.checkPermission(player, location, permission, null) == null;
     }
 }

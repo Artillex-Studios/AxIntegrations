@@ -14,10 +14,10 @@ import su.nightexpress.excellentshop.feature.virtualshop.product.VirtualProduct;
 
 import java.util.UUID;
 
-public class ExcellentShop5Shop extends ShopIntegration {
+public class ExcellentShop50Shop extends ShopIntegration {
     private VirtualShopModule module;
 
-    public ExcellentShop5Shop() {
+    public ExcellentShop50Shop() {
         super("ExcellentShop");
     }
 

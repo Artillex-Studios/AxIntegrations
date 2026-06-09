@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    compileOnly("com.github.GriefPrevention:GriefPrevention:18.0.0")
+    compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.7")
 }
