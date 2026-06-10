@@ -4,7 +4,6 @@ import com.artillexstudios.axintegrations.Integration;
 import com.artillexstudios.axintegrations.IntegrationManager;
 import com.artillexstudios.axintegrations.IntegrationType;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

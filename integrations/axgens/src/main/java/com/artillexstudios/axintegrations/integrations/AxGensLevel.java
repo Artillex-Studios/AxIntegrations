@@ -6,18 +6,10 @@ import com.artillexstudios.axgens.api.AxGensAPI;
 import com.artillexstudios.axgens.user.AxGensUser;
 import com.artillexstudios.axgens.user.Users;
 import com.artillexstudios.axintegrations.types.LevelIntegration;
-import com.artillexstudios.axintegrations.types.ShopIntegration;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-
-import static com.artillexstudios.axgens.AxGens.MESSAGEUTILS;
 
 public class AxGensLevel extends LevelIntegration {
 

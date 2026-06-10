@@ -1,7 +1,6 @@
 package com.artillexstudios.axintegrations;
 
 import com.artillexstudios.axapi.utils.StringUtils;
-import com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent;
 import com.artillexstudios.axintegrations.api.events.AxIntegrationsReloadEvent;
 import com.artillexstudios.axintegrations.exceptions.IntegrationsLockedException;
 import com.artillexstudios.axintegrations.functions.EnableFunction;
