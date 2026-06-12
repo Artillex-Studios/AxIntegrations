@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +40,35 @@ public class PartiesTeam extends TeamIntegration {
 
     @Override
     public String getTeam(@NotNull Player player) {
-        Party party = api.getPartyOfPlayer(player.getUniqueId());
+        Party party = getObject(player);
         if (party == null) return null;
         return party.getName();
     }
 
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull Player player) {
+        Party party = getObject(player);
+        if (party == null) return null;
+        UUID leader = party.getLeader();
+        if (leader == null) return null;
+        return Bukkit.getOfflinePlayer(leader);
+    }
+
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull String teamName) {
+        Party party = getObject(teamName);
+        if (party == null) return null;
+        UUID leader = party.getLeader();
+        if (leader == null) return null;
+        return Bukkit.getOfflinePlayer(leader);
+    }
+
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull Player player) {
-        Party party = api.getPartyOfPlayer(player.getUniqueId());
+        Party party = getObject(player);
         if (party == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (UUID uuid : party.getMembers()) {
@@ -55,9 +77,10 @@ public class PartiesTeam extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull String teamName) {
-        Party party = api.getParty(teamName);
+        Party party = getObject(teamName);
         if (party == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (UUID uuid : party.getMembers()) {
@@ -66,9 +89,10 @@ public class PartiesTeam extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<Player> getOnlineMembers(@NotNull Player player) {
-        Party party = api.getPartyOfPlayer(player.getUniqueId());
+        Party party = getObject(player);
         if (party == null) return List.of();
         List<Player> members = new ArrayList<>();
         for (PartyPlayer member : party.getOnlineMembers()) {
@@ -77,14 +101,25 @@ public class PartiesTeam extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<Player> getOnlineMembers(@NotNull String teamName) {
-        Party party = api.getParty(teamName);
+        Party party = getObject(teamName);
         if (party == null) return List.of();
         List<Player> members = new ArrayList<>();
         for (PartyPlayer member : party.getOnlineMembers()) {
             members.add(Bukkit.getPlayer(member.getPlayerUUID()));
         }
         return members;
+    }
+
+    @Nullable
+    private Party getObject(@NotNull Player player) {
+        return api.getPartyOfPlayer(player.getUniqueId());
+    }
+
+    @Nullable
+    private Party getObject(@NotNull String teamName) {
+        return api.getParty(teamName);
     }
 }

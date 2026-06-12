@@ -30,27 +30,50 @@ public class GangsPlusTeam extends TeamIntegration {
 
     @Override
     public String getTeam(@NotNull Player player) {
-        Gang gang = GangsPlusApi.getPlayersGang(player);
+        Gang gang = getObject(player);
         if (gang == null) return null;
         return gang.getName();
     }
 
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull Player player) {
+        Gang gang = getObject(player);
+        if (gang == null) return null;
+        return gang.getOwner();
+    }
+
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull String teamName) {
+        Gang gang = getObject(teamName);
+        if (gang == null) return null;
+        return gang.getOwner();
+    }
+
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull Player player) {
-        Gang gang = GangsPlusApi.getPlayersGang(player);
+        Gang gang = getObject(player);
         if (gang == null) return List.of();
         return new ArrayList<>(gang.getAllMembers());
     }
 
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull String teamName) {
-        Gang gang = getGang(teamName);
+        Gang gang = getObject(teamName);
         if (gang == null) return List.of();
         return new ArrayList<>(gang.getAllMembers());
     }
 
     @Nullable
-    private Gang getGang(String teamName) {
+    private Gang getObject(@NotNull Player player) {
+        return GangsPlusApi.getPlayersGang(player);
+    }
+
+    @Nullable
+    private Gang getObject(@NotNull String teamName) {
         for (Gang gang : GangsPlusApi.getAllGangs()) {
             if (gang.getName().equals(teamName)) return gang;
         }

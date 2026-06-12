@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,25 +34,32 @@ public class FactionsUUIDTeam extends TeamIntegration {
 
     @Override
     public String getTeam(@NotNull Player player) {
-        FPlayer fplayer = FPlayers.fPlayers().get(player);
-        if (!fplayer.hasFaction()) return null;
-        return fplayer.faction().tag();
+        Faction faction = getObject(player);
+        if (faction == null) return null;
+        return faction.tag();
     }
 
     @Override
-    public List<OfflinePlayer> getMembers(@NotNull Player player) {
-        FPlayer fplayer = FPlayers.fPlayers().get(player);
-        if (!fplayer.hasFaction()) return List.of();
-        List<OfflinePlayer> members = new ArrayList<>();
-        for (FPlayer member : fplayer.faction().members()) {
-            members.add(Bukkit.getOfflinePlayer(member.uniqueId()));
-        }
-        return members;
+    public OfflinePlayer getLeader(@NonNull Player player) {
+        Faction faction = getObject(player);
+        if (faction == null) return null;
+        FPlayer admin = faction.admin();
+        if (admin == null) return null;
+        return Bukkit.getOfflinePlayer(admin.uniqueId());
     }
 
     @Override
-    public List<OfflinePlayer> getMembers(@NotNull String teamName) {
-        Faction faction = Factions.factions().get(teamName);
+    public OfflinePlayer getLeader(@NonNull String teamName) {
+        Faction faction = getObject(teamName);
+        if (faction == null) return null;
+        FPlayer admin = faction.admin();
+        if (admin == null) return null;
+        return Bukkit.getOfflinePlayer(admin.uniqueId());
+    }
+
+    @Override
+    public @NonNull List<OfflinePlayer> getMembers(@NotNull Player player) {
+        Faction faction = getObject(player);
         if (faction == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (FPlayer member : faction.members()) {
@@ -60,16 +69,39 @@ public class FactionsUUIDTeam extends TeamIntegration {
     }
 
     @Override
-    public List<Player> getOnlineMembers(@NotNull Player player) {
-        FPlayer fplayer = FPlayers.fPlayers().get(player);
-        if (!fplayer.hasFaction()) return List.of();
-        return new ArrayList<>(fplayer.faction().membersOnlineAsPlayers());
+    public @NonNull List<OfflinePlayer> getMembers(@NotNull String teamName) {
+        Faction faction = getObject(teamName);
+        if (faction == null) return List.of();
+        List<OfflinePlayer> members = new ArrayList<>();
+        for (FPlayer member : faction.members()) {
+            members.add(Bukkit.getOfflinePlayer(member.uniqueId()));
+        }
+        return members;
     }
 
     @Override
-    public List<Player> getOnlineMembers(@NotNull String teamName) {
-        Faction faction = Factions.factions().get(teamName);
+    public @NonNull List<Player> getOnlineMembers(@NotNull Player player) {
+        Faction faction = getObject(player);
         if (faction == null) return List.of();
         return new ArrayList<>(faction.membersOnlineAsPlayers());
+    }
+
+    @Override
+    public @NonNull List<Player> getOnlineMembers(@NotNull String teamName) {
+        Faction faction = getObject(teamName);
+        if (faction == null) return List.of();
+        return new ArrayList<>(faction.membersOnlineAsPlayers());
+    }
+
+    @Nullable
+    private Faction getObject(@NotNull Player player) {
+        FPlayer fPlayer = FPlayers.fPlayers().get(player);
+        if (!fPlayer.hasFaction()) return null;
+        return fPlayer.faction();
+    }
+
+    @Nullable
+    private Faction getObject(@NotNull String teamName) {
+        return Factions.factions().get(teamName);
     }
 }

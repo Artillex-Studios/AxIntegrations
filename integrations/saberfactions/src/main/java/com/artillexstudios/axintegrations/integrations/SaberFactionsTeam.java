@@ -9,6 +9,7 @@ import com.massivecraft.factions.Factions;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,25 +42,35 @@ public class SaberFactionsTeam extends TeamIntegration {
 
     @Override
     public String getTeam(@NotNull Player player) {
-        FPlayer fplayer = fPlayers.getByPlayer(player);
-        if (!fplayer.hasFaction()) return null;
-        return fplayer.getFaction().getTag();
+        Faction faction = getObject(player);
+        if (faction == null) return null;
+        return faction.getTag();
     }
 
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull Player player) {
+        Faction faction = getObject(player);
+        if (faction == null) return null;
+        FPlayer fPlayer = faction.getFPlayerLeader();
+        if (fPlayer == null) return null;
+        return fPlayer.getPlayer();
+    }
+
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull String teamName) {
+        Faction faction = getObject(teamName);
+        if (faction == null) return null;
+        FPlayer fPlayer = faction.getFPlayerLeader();
+        if (fPlayer == null) return null;
+        return fPlayer.getPlayer();
+    }
+
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull Player player) {
-        FPlayer fplayer = fPlayers.getByPlayer(player);
-        if (!fplayer.hasFaction()) return List.of();
-        List<OfflinePlayer> members = new ArrayList<>();
-        for (FPlayer member : fplayer.getFaction().getFPlayers()) {
-            members.add(member.getPlayer());
-        }
-        return members;
-    }
-
-    @Override
-    public List<OfflinePlayer> getMembers(@NotNull String teamName) {
-        Faction faction = factions.getByTag(teamName);
+        Faction faction = getObject(player);
         if (faction == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (FPlayer member : faction.getFPlayers()) {
@@ -68,17 +79,43 @@ public class SaberFactionsTeam extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
-    public List<Player> getOnlineMembers(@NotNull Player player) {
-        FPlayer fplayer = fPlayers.getByPlayer(player);
-        if (!fplayer.hasFaction()) return List.of();
-        return new ArrayList<>(fplayer.getFaction().getOnlinePlayers());
+    public List<OfflinePlayer> getMembers(@NotNull String teamName) {
+        Faction faction = getObject(teamName);
+        if (faction == null) return List.of();
+        List<OfflinePlayer> members = new ArrayList<>();
+        for (FPlayer member : faction.getFPlayers()) {
+            members.add(member.getPlayer());
+        }
+        return members;
     }
 
+    @NotNull
     @Override
-    public List<Player> getOnlineMembers(@NotNull String teamName) {
-        Faction faction = factions.getByTag(teamName);
+    public List<Player> getOnlineMembers(@NotNull Player player) {
+        Faction faction = getObject(player);
         if (faction == null) return List.of();
         return new ArrayList<>(faction.getOnlinePlayers());
+    }
+
+    @NotNull
+    @Override
+    public List<Player> getOnlineMembers(@NotNull String teamName) {
+        Faction faction = getObject(teamName);
+        if (faction == null) return List.of();
+        return new ArrayList<>(faction.getOnlinePlayers());
+    }
+
+    @Nullable
+    private Faction getObject(@NotNull Player player) {
+        FPlayer fplayer = fPlayers.getByPlayer(player);
+        if (!fplayer.hasFaction()) return null;
+        return fplayer.getFaction();
+    }
+
+    @Nullable
+    private Faction getObject(@NotNull String teamName) {
+        return factions.getByTag(teamName);
     }
 }

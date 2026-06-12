@@ -8,6 +8,7 @@ import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,18 +31,31 @@ public class SuperiorSkyBlock2Team extends TeamIntegration {
 
     @Override
     public String getTeam(@NotNull Player player) {
-        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
-        if (superiorPlayer == null) return null;
-        Island island = superiorPlayer.getIsland();
+        Island island = getObject(player);
         if (island == null) return null;
         return island.getName();
     }
 
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull Player player) {
+        Island island = getObject(player);
+        if (island == null) return null;
+        return island.getOwner().asOfflinePlayer();
+    }
+
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull String teamName) {
+        Island island = getObject(teamName);
+        if (island == null) return null;
+        return island.getOwner().asOfflinePlayer();
+    }
+
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull Player player) {
-        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
-        if (superiorPlayer == null) return List.of();
-        Island island = superiorPlayer.getIsland();
+        Island island = getObject(player);
         if (island == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (SuperiorPlayer member : island.getIslandMembers(true)) {
@@ -50,9 +64,10 @@ public class SuperiorSkyBlock2Team extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull String teamName) {
-        Island island = SuperiorSkyblockAPI.getIsland(teamName);
+        Island island = getObject(teamName);
         if (island == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (SuperiorPlayer member : island.getIslandMembers(true)) {
@@ -61,11 +76,10 @@ public class SuperiorSkyBlock2Team extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<Player> getOnlineMembers(@NotNull Player player) {
-        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
-        if (superiorPlayer == null) return List.of();
-        Island island = superiorPlayer.getIsland();
+        Island island = getObject(player);
         if (island == null) return List.of();
         List<Player> members = new ArrayList<>();
         for (SuperiorPlayer member : island.getIslandMembers(true)) {
@@ -75,9 +89,10 @@ public class SuperiorSkyBlock2Team extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<Player> getOnlineMembers(@NotNull String teamName) {
-        Island island = SuperiorSkyblockAPI.getIsland(teamName);
+        Island island = getObject(teamName);
         if (island == null) return List.of();
         List<Player> members = new ArrayList<>();
         for (SuperiorPlayer member : island.getIslandMembers(true)) {
@@ -85,5 +100,17 @@ public class SuperiorSkyBlock2Team extends TeamIntegration {
             members.add(member.asPlayer());
         }
         return members;
+    }
+
+    @Nullable
+    private Island getObject(@NotNull Player player) {
+        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
+        if (superiorPlayer == null) return null;
+        return superiorPlayer.getIsland();
+    }
+
+    @Nullable
+    private Island getObject(@NotNull String teamName) {
+        return SuperiorSkyblockAPI.getIsland(teamName);
     }
 }

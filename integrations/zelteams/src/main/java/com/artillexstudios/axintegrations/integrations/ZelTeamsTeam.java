@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +44,31 @@ public class ZelTeamsTeam extends TeamIntegration {
 
     @Override
     public String getTeam(@NotNull Player player) {
-        ITeam iTeam = manager.getTeam(player).orElse(null);
+        ITeam iTeam = getObject(player);
         if (iTeam == null) return null;
         return iTeam.getName();
     }
 
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull Player player) {
+        ITeam iTeam = getObject(player);
+        if (iTeam == null) return null;
+        return Bukkit.getOfflinePlayer(iTeam.getOwner().getUuid());
+    }
+
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull String teamName) {
+        ITeam iTeam = getObject(teamName);
+        if (iTeam == null) return null;
+        return Bukkit.getOfflinePlayer(iTeam.getOwner().getUuid());
+    }
+
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull Player player) {
-        ITeam iTeam = manager.getTeam(player).orElse(null);
+        ITeam iTeam = getObject(player);
         if (iTeam == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (IMember member : iTeam.getAllMembers()) {
@@ -59,14 +77,25 @@ public class ZelTeamsTeam extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull String teamName) {
-        ITeam iTeam = manager.getTeamByName(teamName).orElse(null);
+        ITeam iTeam = getObject(teamName);
         if (iTeam == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (IMember member : iTeam.getAllMembers()) {
             members.add(Bukkit.getOfflinePlayer(member.getUuid()));
         }
         return members;
+    }
+
+    @Nullable
+    private ITeam getObject(@NotNull Player player) {
+        return manager.getTeam(player).orElse(null);
+    }
+
+    @Nullable
+    private ITeam getObject(@NotNull String teamName) {
+        return manager.getTeamByName(teamName).orElse(null);
     }
 }

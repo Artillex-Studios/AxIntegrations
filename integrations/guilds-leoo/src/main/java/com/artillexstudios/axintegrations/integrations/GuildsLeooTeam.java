@@ -9,6 +9,7 @@ import me.leoo.guilds.api.objects.player.PlayerView;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,14 +44,31 @@ public class GuildsLeooTeam extends TeamIntegration {
 
     @Override
     public String getTeam(@NotNull Player player) {
-        GuildView guild = provider.getByPlayer(player);
+        GuildView guild = getObject(player);
         if (guild == null) return null;
         return guild.getName();
     }
 
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull Player player) {
+        GuildView guild = getObject(player);
+        if (guild == null) return null;
+        return guild.getLeaderPlayer().getOfflinePlayer();
+    }
+
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull String teamName) {
+        GuildView guild = getObject(teamName);
+        if (guild == null) return null;
+        return guild.getLeaderPlayer().getOfflinePlayer();
+    }
+
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull Player player) {
-        GuildView guild = provider.getByPlayer(player);
+        GuildView guild = getObject(player);
         if (guild == null) return List.of();
         Set<OfflinePlayer> members = new HashSet<>();
         for (PlayerView member : guild.getOfflinePlayers()) {
@@ -62,9 +80,10 @@ public class GuildsLeooTeam extends TeamIntegration {
         return new ArrayList<>(members);
     }
 
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull String teamName) {
-        GuildView guild = provider.getByName(teamName);
+        GuildView guild = getObject(teamName);
         if (guild == null) return List.of();
         Set<OfflinePlayer> members = new HashSet<>();
         for (PlayerView member : guild.getOfflinePlayers()) {
@@ -76,9 +95,10 @@ public class GuildsLeooTeam extends TeamIntegration {
         return new ArrayList<>(members);
     }
 
+    @NotNull
     @Override
     public List<Player> getOnlineMembers(@NotNull Player player) {
-        GuildView guild = provider.getByPlayer(player);
+        GuildView guild = getObject(player);
         if (guild == null) return List.of();
         List<Player> members = new ArrayList<>();
         for (PlayerView member : guild.getOnlinePlayers()) {
@@ -87,14 +107,25 @@ public class GuildsLeooTeam extends TeamIntegration {
         return new ArrayList<>(members);
     }
 
+    @NotNull
     @Override
     public List<Player> getOnlineMembers(@NotNull String teamName) {
-        GuildView guild = provider.getByName(teamName);
+        GuildView guild = getObject(teamName);
         if (guild == null) return List.of();
         List<Player> members = new ArrayList<>();
         for (PlayerView member : guild.getOnlinePlayers()) {
             members.add(member.getOnlinePlayer());
         }
         return new ArrayList<>(members);
+    }
+
+    @Nullable
+    private GuildView getObject(@NotNull Player player) {
+        return provider.getByPlayer(player);
+    }
+
+    @Nullable
+    private GuildView getObject(@NotNull String teamName) {
+        return provider.getByName(teamName);
     }
 }

@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +47,31 @@ public class UltimateClansTeam extends TeamIntegration {
 
     @Override
     public String getTeam(@NotNull Player player) {
-        ClanData clanData = playerManager.getPlayerClan(player.getUniqueId()).orElse(null);
+        ClanData clanData = getObject(player);
         if (clanData == null) return null;
         return clanData.getTagNoColor();
     }
 
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull Player player) {
+        ClanData clanData = getObject(player);
+        if (clanData == null) return null;
+        return Bukkit.getOfflinePlayer(clanData.getLeader());
+    }
+
+    @Nullable
+    @Override
+    public OfflinePlayer getLeader(@NotNull String teamName) {
+        ClanData clanData = getObject(teamName);
+        if (clanData == null) return null;
+        return Bukkit.getOfflinePlayer(clanData.getLeader());
+    }
+
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull Player player) {
-        ClanData clanData = playerManager.getPlayerClan(player.getUniqueId()).orElse(null);
+        ClanData clanData = getObject(player);
         if (clanData == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (UUID uuid : clanData.getMembers()) {
@@ -62,9 +80,10 @@ public class UltimateClansTeam extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<OfflinePlayer> getMembers(@NotNull String teamName) {
-        ClanData clanData = clanManager.getClanDataByTag(teamName).orElse(null);
+        ClanData clanData = getObject(teamName);
         if (clanData == null) return List.of();
         List<OfflinePlayer> members = new ArrayList<>();
         for (UUID uuid : clanData.getMembers()) {
@@ -73,9 +92,10 @@ public class UltimateClansTeam extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<Player> getOnlineMembers(@NotNull Player player) {
-        ClanData clanData = playerManager.getPlayerClan(player.getUniqueId()).orElse(null);
+        ClanData clanData = getObject(player);
         if (clanData == null) return List.of();
         List<Player> members = new ArrayList<>();
         for (UUID uuid : clanData.getOnlineMembers()) {
@@ -84,14 +104,25 @@ public class UltimateClansTeam extends TeamIntegration {
         return members;
     }
 
+    @NotNull
     @Override
     public List<Player> getOnlineMembers(@NotNull String teamName) {
-        ClanData clanData = clanManager.getClanDataByTag(teamName).orElse(null);
+        ClanData clanData = getObject(teamName);
         if (clanData == null) return List.of();
         List<Player> members = new ArrayList<>();
         for (UUID uuid : clanData.getOnlineMembers()) {
             members.add(Bukkit.getPlayer(uuid));
         }
         return members;
+    }
+
+    @Nullable
+    private ClanData getObject(@NotNull Player player) {
+        return playerManager.getPlayerClan(player.getUniqueId()).orElse(null);
+    }
+
+    @Nullable
+    private ClanData getObject(@NotNull String teamName) {
+        return clanManager.getClanDataByTag(teamName).orElse(null);
     }
 }
