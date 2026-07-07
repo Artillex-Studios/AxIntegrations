@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    compileOnly("com.github.Zeltuv:zelteams-api:3.3.4-B")
+    compileOnly("com.github.Zeltuv:zelteams-api:3.4.0")
 }

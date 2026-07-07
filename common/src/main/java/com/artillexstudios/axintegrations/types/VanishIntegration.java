@@ -4,6 +4,7 @@ import com.artillexstudios.axintegrations.Integration;
 import com.artillexstudios.axintegrations.IntegrationManager;
 import com.artillexstudios.axintegrations.IntegrationType;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,6 +43,9 @@ public abstract class VanishIntegration extends Integration {
     }
 
     public static boolean isPlayerVanished(@NotNull Player player) {
+        for (MetadataValue meta : player.getMetadata("vanished")) {
+            if (meta.asBoolean()) return true;
+        }
         for (VanishIntegration integration : list()) {
             if (integration.isVanished(player)) {
                 return true;

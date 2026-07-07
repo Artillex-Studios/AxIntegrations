@@ -46,7 +46,7 @@ public class ZelTeamsTeam extends TeamIntegration {
     public String getTeam(@NotNull Player player) {
         ITeam iTeam = getObject(player);
         if (iTeam == null) return null;
-        return iTeam.getName();
+        return iTeam.getTag();
     }
 
     @Nullable
@@ -96,6 +96,6 @@ public class ZelTeamsTeam extends TeamIntegration {
 
     @Nullable
     private ITeam getObject(@NotNull String teamName) {
-        return manager.getTeamByName(teamName).orElse(null);
+        return manager.getByTag(teamName).orElse(null);
     }
 }
