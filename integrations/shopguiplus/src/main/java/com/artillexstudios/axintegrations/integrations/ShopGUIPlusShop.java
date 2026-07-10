@@ -57,7 +57,7 @@ public class ShopGUIPlusShop extends ShopIntegration {
     @Override
     public Double getSellPrice(UUID playerUUID, @NotNull ItemStack item) {
         Player player = Bukkit.getPlayer(playerUUID);
-        if (player == null) return getBuyPrice(item);
+        if (player == null) return getSellPrice(item);
         double price = ShopGuiPlusApi.getItemStackPriceSell(player, copy(item));
         if (price == -1.0D) return null;
         return price * item.getAmount();
