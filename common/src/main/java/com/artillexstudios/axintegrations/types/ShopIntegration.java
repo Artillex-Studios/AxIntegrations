@@ -14,7 +14,7 @@ import java.util.UUID;
  * Rules
  * - handle {@link ItemStack#getAmount()} and include it for the return value
  * - never modify the {@link ItemStack} object, use {@link ItemStack#clone()} if necessary
- * - return null if item is not present in the shop
+ * - return null if item is not present in the shop or if is unsellable/unbuyable
  * - if the plugin doesn't support per player prices or offline players, just return the regular price of the item
  */
 public abstract class ShopIntegration extends Integration {
