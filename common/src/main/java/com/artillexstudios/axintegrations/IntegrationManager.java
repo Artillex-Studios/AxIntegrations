@@ -45,7 +45,11 @@ public class IntegrationManager {
     }
 
     public static <T extends Integration> void registerIntegration(T integration) {
-        if (locked) throw new IntegrationsLockedException("The integration manager is locked. Please register your integrations by listening to AxIntegrationsLoadEvent.");
+        registerIntegration(integration, false);
+    }
+
+    private static <T extends Integration> void registerIntegration(T integration, boolean force) {
+        if (!force && locked) throw new IntegrationsLockedException("The integration manager is locked. Please register your integrations by listening to AxIntegrationsLoadEvent.");
         List<T> list = (List<T>) registeredIntegrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
         list.add(integration);
     }
@@ -64,8 +68,8 @@ public class IntegrationManager {
     protected static void setup(IntegrationSetup setup) {
         IntegrationManager.setup = setup;
         IntegrationManager.plugin = setup.javaPlugin;
-        IntegrationManager.locked = true;
         reload(true);
+        IntegrationManager.locked = true;
     }
 
 
@@ -168,7 +172,7 @@ public class IntegrationManager {
             if (!integration.canLoad()) return;
             if (!function.isEnabled(integration.getName())) return;
             if (!integration.setup()) return;
-            registerIntegration(integration);
+            registerIntegration(integration, true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
