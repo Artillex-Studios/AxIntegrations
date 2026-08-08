@@ -53,6 +53,11 @@ public class EcoBitsCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return currency.isDecimal();
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return CurrencyUtils.getBalance(player, currency).doubleValue();
     }

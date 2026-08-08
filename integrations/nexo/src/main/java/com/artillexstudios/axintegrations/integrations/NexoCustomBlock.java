@@ -5,6 +5,7 @@ import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axintegrations.types.CustomBlockIntegration;
 import com.nexomc.nexo.api.NexoBlocks;
 import com.nexomc.nexo.api.NexoItems;
+import com.nexomc.nexo.utils.drops.Drop;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,7 @@ public class NexoCustomBlock extends CustomBlockIntegration {
     @Override
     public boolean remove(@NotNull Location location) {
         if (!isCustomBlock(location)) return false;
-        NexoBlocks.remove(location, null, false);
+        NexoBlocks.remove(location, null, Drop.emptyDrop());
         return true;
     }
 }

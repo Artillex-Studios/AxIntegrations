@@ -41,6 +41,11 @@ public class SuperMobCoinsCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return false;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         Profile profile = manager.getProfile(player);
         if (profile == null) return 0D;

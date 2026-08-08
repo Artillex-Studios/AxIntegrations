@@ -44,6 +44,11 @@ public class VaultCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return true;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return api.getBalance(player);
     }

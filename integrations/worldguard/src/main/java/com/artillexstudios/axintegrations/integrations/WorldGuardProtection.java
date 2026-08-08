@@ -5,6 +5,7 @@ import com.artillexstudios.axintegrations.types.ProtectionIntegration;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
 import com.sk89q.worldguard.protection.flags.Flags;
@@ -14,9 +15,10 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class WorldGuardProtection extends ProtectionIntegration {
-    private com.sk89q.worldguard.WorldGuard instance;
+    private WorldGuard instance;
     private WorldGuardPlugin pluginInstance;
     private WorldGuardPlatform platform;
 
@@ -31,7 +33,7 @@ public class WorldGuardProtection extends ProtectionIntegration {
 
     @Override
     public boolean setup() {
-        instance = com.sk89q.worldguard.WorldGuard.getInstance();
+        instance = WorldGuard.getInstance();
         platform = instance.getPlatform();
         pluginInstance = WorldGuardPlugin.inst();
         return true;
@@ -64,12 +66,15 @@ public class WorldGuardProtection extends ProtectionIntegration {
         return testState(player, location, Flags.CHEST_ACCESS);
     }
 
-    private boolean testState(Player player, Location location, StateFlag flag) {
-        LocalPlayer localPlayer = pluginInstance.wrapPlayer(player);
-        World world = BukkitAdapter.adapt(player.getWorld());
+    private boolean testState(@Nullable Player player, Location location, StateFlag flag) {
+        LocalPlayer localPlayer = null;
+        if (player != null) {
+            localPlayer = pluginInstance.wrapPlayer(player);
+            World world = BukkitAdapter.adapt(player.getWorld());
 
-        boolean canBypass = platform.getSessionManager().hasBypass(localPlayer, world);
-        if (canBypass) return true;
+            boolean canBypass = platform.getSessionManager().hasBypass(localPlayer, world);
+            if (canBypass) return true;
+        }
 
         RegionContainer container = platform.getRegionContainer();
         RegionQuery query = container.createQuery();

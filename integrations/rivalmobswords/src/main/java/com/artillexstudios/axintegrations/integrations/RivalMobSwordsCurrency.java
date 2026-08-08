@@ -45,6 +45,11 @@ public class RivalMobSwordsCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return true;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return manager.getEconomyAmount(player);
     }

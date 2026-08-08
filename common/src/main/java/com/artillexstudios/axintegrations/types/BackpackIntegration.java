@@ -31,6 +31,16 @@ public abstract class BackpackIntegration extends Integration {
         return list().stream().findFirst().orElse(null);
     }
 
+    /**
+     * returns a loaded integration by name
+     */
+    @Nullable
+    public static BackpackIntegration one(String name) {
+        return list().stream().filter(i -> {
+            return i.getName().equalsIgnoreCase(name) || i.getFormattedName().equalsIgnoreCase(name);
+        }).findFirst().orElse(null);
+    }
+
     public BackpackIntegration(String name) {
         super(name, IntegrationType.BACKPACK);
     }

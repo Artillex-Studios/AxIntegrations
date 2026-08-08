@@ -34,6 +34,16 @@ public abstract class TeamIntegration extends Integration {
         return list().stream().findFirst().orElse(null);
     }
 
+    /**
+     * returns a loaded integration by name
+     */
+    @Nullable
+    public static TeamIntegration one(String name) {
+        return list().stream().filter(i -> {
+            return i.getName().equalsIgnoreCase(name) || i.getFormattedName().equalsIgnoreCase(name);
+        }).findFirst().orElse(null);
+    }
+
     public TeamIntegration(String name) {
         super(name, IntegrationType.TEAM);
     }

@@ -38,6 +38,16 @@ public abstract class VanishIntegration extends Integration {
         return list().stream().findFirst().orElse(null);
     }
 
+    /**
+     * returns a loaded integration by name
+     */
+    @Nullable
+    public static VanishIntegration one(String name) {
+        return list().stream().filter(i -> {
+            return i.getName().equalsIgnoreCase(name) || i.getFormattedName().equalsIgnoreCase(name);
+        }).findFirst().orElse(null);
+    }
+
     public VanishIntegration(String name) {
         super(name, IntegrationType.VANISH);
     }

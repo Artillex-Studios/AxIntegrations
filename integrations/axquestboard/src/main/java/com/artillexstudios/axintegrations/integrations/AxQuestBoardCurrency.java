@@ -31,6 +31,11 @@ public class AxQuestBoardCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return false;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return AxQuestBoardAPI.getPoints(player.getUniqueId()); // todo: add better method
     }

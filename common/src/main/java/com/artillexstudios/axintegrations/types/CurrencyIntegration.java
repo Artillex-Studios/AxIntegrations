@@ -35,6 +35,16 @@ public abstract class CurrencyIntegration extends Integration {
         return list().stream().findFirst().orElse(null);
     }
 
+    /**
+     * returns a loaded integration by name
+     */
+    @Nullable
+    public static CurrencyIntegration one(String name) {
+        return list().stream().filter(i -> {
+            return i.getName().equalsIgnoreCase(name) || i.getFormattedName().equalsIgnoreCase(name);
+        }).findFirst().orElse(null);
+    }
+
     public CurrencyIntegration(String name, String currency) {
         super(name, IntegrationType.CURRENCY);
         this.currency = currency;
@@ -56,6 +66,11 @@ public abstract class CurrencyIntegration extends Integration {
      * does this integration work on offline players?
      */
     public abstract boolean worksOffline();
+
+    /**
+     * does this integration work use double or float?
+     */
+    public abstract boolean usesDecimals();
 
     /**
      * use {@link this#getBalance(UUID)} if possible

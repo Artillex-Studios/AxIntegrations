@@ -35,6 +35,16 @@ public abstract class ShopIntegration extends Integration {
         return list().stream().findFirst().orElse(null);
     }
 
+    /**
+     * returns a loaded integration by name
+     */
+    @Nullable
+    public static ShopIntegration one(String name) {
+        return list().stream().filter(i -> {
+            return i.getName().equalsIgnoreCase(name) || i.getFormattedName().equalsIgnoreCase(name);
+        }).findFirst().orElse(null);
+    }
+
     public enum PurchaseType {
         BUY,
         SELL

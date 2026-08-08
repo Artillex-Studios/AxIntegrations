@@ -41,6 +41,11 @@ public class AxHoesCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return true;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return api.getBalance(player.getUniqueId());
     }

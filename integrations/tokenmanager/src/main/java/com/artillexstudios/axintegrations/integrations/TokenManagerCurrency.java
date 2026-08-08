@@ -40,6 +40,11 @@ public class TokenManagerCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return false;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return (double) api.getTokens(player).orElse(0);
     }

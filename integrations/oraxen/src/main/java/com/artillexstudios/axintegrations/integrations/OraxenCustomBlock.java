@@ -5,6 +5,7 @@ import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axintegrations.types.CustomBlockIntegration;
 import io.th0rgal.oraxen.api.OraxenBlocks;
 import io.th0rgal.oraxen.api.OraxenItems;
+import io.th0rgal.oraxen.utils.drops.Drop;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,7 @@ public class OraxenCustomBlock extends CustomBlockIntegration {
     @Override
     public boolean remove(@NotNull Location location) {
         if (!isCustomBlock(location)) return false;
-        OraxenBlocks.remove(location, null, false);
+        OraxenBlocks.remove(location, null, Drop.emptyDrop());
         return true;
     }
 }

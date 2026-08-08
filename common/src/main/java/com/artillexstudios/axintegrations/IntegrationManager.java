@@ -168,8 +168,7 @@ public class IntegrationManager {
             if (!integration.canLoad()) return;
             if (!function.isEnabled(integration.getName())) return;
             if (!integration.setup()) return;
-            List<T> list = (List<T>) registeredIntegrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
-            list.add(integration);
+            registerIntegration(integration);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

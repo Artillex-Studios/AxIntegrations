@@ -31,6 +31,11 @@ public class ExperienceCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return false;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return ExperienceUtils.getExp(player);
     }

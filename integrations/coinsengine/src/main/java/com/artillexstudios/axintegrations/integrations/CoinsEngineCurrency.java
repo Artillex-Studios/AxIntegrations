@@ -50,6 +50,11 @@ public class CoinsEngineCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return currency.isDecimal();
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return CoinsEngineAPI.getBalance(player, currency);
     }

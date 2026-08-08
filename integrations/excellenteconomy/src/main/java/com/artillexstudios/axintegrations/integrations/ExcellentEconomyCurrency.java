@@ -10,10 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import su.nightexpress.excellenteconomy.api.ExcellentEconomyAPI;
 import su.nightexpress.excellenteconomy.api.currency.ExcellentCurrency;
 
+import java.lang.reflect.Method;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class ExcellentEconomyCurrency extends CurrencyIntegration {
+    private Method method;
     private ExcellentEconomyAPI api;
     private ExcellentCurrency currency;
 
@@ -41,6 +43,13 @@ public class ExcellentEconomyCurrency extends CurrencyIntegration {
             IntegrationManager.print(false, "Failed to register %s! Currency '%s' not found!".formatted(getName(), name));
             return false;
         }
+
+        try {
+            Class<?> clazz = Class.forName("su.nightexpress.excellenteconomy.api.currency.ExcellentCurrency");
+            method = clazz.getMethod("isDecimal");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return true;
     }
 
@@ -52,6 +61,16 @@ public class ExcellentEconomyCurrency extends CurrencyIntegration {
     @Override
     public boolean worksOffline() {
         return true;
+    }
+
+    @Override
+    public boolean usesDecimals() {
+        try {
+            return (Boolean) method.invoke(currency);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return true;
+        }
     }
 
     @Override

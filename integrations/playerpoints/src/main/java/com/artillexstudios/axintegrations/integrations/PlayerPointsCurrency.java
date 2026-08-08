@@ -43,8 +43,13 @@ public class PlayerPointsCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return false;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
-        return (double) api.look(player.getUniqueId());
+        return api.look(player.getUniqueId());
     }
 
     @NotNull

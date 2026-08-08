@@ -40,6 +40,11 @@ public class RoyaleEconomyCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return true;
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         return api.balance.getBalance(player.getUniqueId().toString());
     }

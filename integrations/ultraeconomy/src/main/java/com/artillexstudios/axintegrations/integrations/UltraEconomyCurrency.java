@@ -56,6 +56,11 @@ public class UltraEconomyCurrency extends CurrencyIntegration {
     }
 
     @Override
+    public boolean usesDecimals() {
+        return !currency.isDecimalBlocked();
+    }
+
+    @Override
     public double getBalance(@NotNull Player player) {
         Balance balance = getPlayerBalance(player.getUniqueId());
         if (balance == null) return 0D;
