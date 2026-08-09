@@ -13,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class ZShopShop extends ShopIntegration {
+public class ZShop2Shop extends ShopIntegration {
     private ShopManager manager;
 
-    public ZShopShop() {
+    public ZShop2Shop() {
         super("zShop");
     }
 

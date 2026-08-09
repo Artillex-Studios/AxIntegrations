@@ -109,7 +109,7 @@ public class IntegrationManager {
             EnableFunction enableFunction = setup.enableFunctionMap.get(enabledType);
             switch (enabledType) {
                 case CURRENCY -> reloadCurrencyIntegrations(enableFunction);
-                case BACKPACK, BANK, CUSTOM_BLOCK, LEVEL, PROTECTION, SHOP, STACKER, TEAM, VANISH -> reloadGenericIntegration(enabledType, enableFunction);
+                case BACKPACK, BANK, CUSTOM_BLOCK, LEVEL, PROTECTION, SHOP, STACKER, TEAM, VANISH, CONTAINER -> reloadGenericIntegration(enabledType, enableFunction);
             }
         }
         printLoaded();
