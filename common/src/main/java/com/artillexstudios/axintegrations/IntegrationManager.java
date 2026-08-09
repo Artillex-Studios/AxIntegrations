@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 public class IntegrationManager {
     private static JavaPlugin plugin;
     private static final Map<IntegrationType, List<? extends Integration>> registeredIntegrations = new HashMap<>();
+    private static final Map<IntegrationType, List<Class<? extends Integration>>> providedIntegrations = new HashMap<>();
     private static IntegrationSetup setup;
     // can new integrations be registered?
     private static boolean locked = false;
-    private static final Map<IntegrationType, List<Class<? extends Integration>>> providedIntegrations = new HashMap<>();
 
     public static <T extends Integration> void provideIntegration(Class<T> integration) {
         if (locked) throw new IntegrationsLockedException("The integration manager is locked. Please register your integrations by listening to AxIntegrationsLoadEvent.");
@@ -68,21 +68,25 @@ public class IntegrationManager {
     protected static void setup(IntegrationSetup setup) {
         IntegrationManager.setup = setup;
         IntegrationManager.plugin = setup.javaPlugin;
-        reload(true);
+        reload(true, null);
         IntegrationManager.locked = true;
     }
 
-
     public static void reload() {
-        reload(false);
+        reload(false, null);
     }
 
-    private static void reload(boolean startup) {
+    public static void reload(Runnable runnable) {
+        reload(false, runnable);
+    }
+
+    private static void reload(boolean startup, Runnable runnable) {
         if (!startup) {
             disable();
             locked = false;
             AxIntegrationsReloadEvent event = new AxIntegrationsReloadEvent();
             Bukkit.getPluginManager().callEvent(event);
+            if (runnable != null) runnable.run();
             locked = true;
         }
         for (IntegrationType enabledType : setup.enabledTypes) {
