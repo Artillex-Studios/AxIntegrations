@@ -29,7 +29,19 @@ public class IntegrationManager {
 
     public static <T extends Integration> void provideIntegration(Class<T> integration) {
         if (locked) throw new IntegrationsLockedException("The integration manager is locked. Please register your integrations by listening to AxIntegrationsLoadEvent.");
+        IntegrationType type = getIntegrationType(integration);
+        List<Class<? extends Integration>> list = providedIntegrations.computeIfAbsent(type, i -> new ArrayList<>());
+        list.add(integration);
+    }
 
+    public static <T extends Integration> void unprovideIntegration(Class<T> integration) {
+        if (locked) throw new IntegrationsLockedException("The integration manager is locked. Please unregister your integrations by listening to AxIntegrationsReloadEvent.");
+        IntegrationType type = getIntegrationType(integration);
+        List<Class<? extends Integration>> list = providedIntegrations.computeIfAbsent(type, i -> new ArrayList<>());
+        list.remove(integration);
+    }
+
+    private static <T extends Integration> IntegrationType getIntegrationType(Class<T> integration) {
         IntegrationType type = null;
         for (IntegrationType integrationType : IntegrationType.values()) {
             if (!integrationType.getClazz().isAssignableFrom(integration)) continue;
@@ -39,9 +51,7 @@ public class IntegrationManager {
         if (type == null) {
             throw new RuntimeException("Invalid integration type!");
         }
-
-        List<Class<? extends Integration>> list = providedIntegrations.computeIfAbsent(type, i -> new ArrayList<>());
-        list.add(integration);
+        return type;
     }
 
     public static <T extends Integration> void registerIntegration(T integration) {
@@ -52,6 +62,12 @@ public class IntegrationManager {
         if (!force && locked) throw new IntegrationsLockedException("The integration manager is locked. Please register your integrations by listening to AxIntegrationsLoadEvent.");
         List<T> list = (List<T>) registeredIntegrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
         list.add(integration);
+    }
+
+    public static <T extends Integration> void unregisterIntegration(T integration) {
+        if (locked) throw new IntegrationsLockedException("The integration manager is locked. Please unregister your integrations by listening to AxIntegrationsReloadEvent.");
+        List<T> list = (List<T>) registeredIntegrations.computeIfAbsent(integration.getType(), type -> new ArrayList<>());
+        list.remove(integration);
     }
 
     public static JavaPlugin getPlugin() {

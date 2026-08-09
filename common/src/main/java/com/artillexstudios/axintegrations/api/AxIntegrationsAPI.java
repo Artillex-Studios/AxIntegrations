@@ -14,10 +14,19 @@ public class AxIntegrationsAPI {
      * this method doesn't automatically enable the integration, it is the same as adding a new integration class to axintegrations directly
      * recommended use case: for public plugin developers who want their plugin to be an option in ax plugins without forcing the integration, so the user can pick it
      *
-     * @throws com.artillexstudios.axintegrations.exceptions.IntegrationsLockedException if the method is executed after the {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent}
+     * @throws com.artillexstudios.axintegrations.exceptions.IntegrationsLockedException if the method is executed outside of the {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent} or {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsReloadEvent}
      */
     public static <T extends Integration> void provideIntegration(Class<T> integration) {
         IntegrationManager.provideIntegration(integration);
+    }
+
+    /**
+     * unprovides an integration
+     *
+     * @throws com.artillexstudios.axintegrations.exceptions.IntegrationsLockedException if the method is executed outside of the {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent} or {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsReloadEvent}
+     */
+    public static <T extends Integration> void unprovideIntegration(Class<T> integration) {
+        IntegrationManager.unprovideIntegration(integration);
     }
 
     /**
@@ -27,10 +36,19 @@ public class AxIntegrationsAPI {
      * warning: this option can cause issues if the plugin only expects 1 active integration, but because of this multiple can get enabled
      * generally it is recommended to use {@link this#provideIntegration(Class)} instead
      *
-     * @throws com.artillexstudios.axintegrations.exceptions.IntegrationsLockedException if the method is executed after the {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent}
+     * @throws com.artillexstudios.axintegrations.exceptions.IntegrationsLockedException if the method is executed outside of the {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent} or {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsReloadEvent}
      */
     public static <T extends Integration> void registerIntegration(T integration) {
         IntegrationManager.registerIntegration(integration);
+    }
+
+    /**
+     * unregisters an integration
+     *
+     * @throws com.artillexstudios.axintegrations.exceptions.IntegrationsLockedException if the method is executed outside of the {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsLoadEvent} or {@link com.artillexstudios.axintegrations.api.events.AxIntegrationsReloadEvent}
+     */
+    public static <T extends Integration> void unregisterIntegration(T integration) {
+        IntegrationManager.unregisterIntegration(integration);
     }
 
     /**
