@@ -38,6 +38,11 @@ public class IntegrationSetup {
         return this;
     }
 
+    public IntegrationSetup enableContainerIntegrations(EnableFunction enableFunction) {
+        enable(IntegrationType.CONTAINER, enableFunction);
+        return this;
+    }
+
     public IntegrationSetup enableCurrencyIntegrations(EnableFunction enableFunction, CurrencySetupFunction currencySetupFunction) {
         this.currencySetupFunction = currencySetupFunction;
         enable(IntegrationType.CURRENCY, enableFunction);

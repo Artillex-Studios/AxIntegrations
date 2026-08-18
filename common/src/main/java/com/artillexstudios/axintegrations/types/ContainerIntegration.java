@@ -8,11 +8,13 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Rules
  * - getContents must return the real contents in a modifiable list
+ * - the contents should always include AIR items if they exist
  */
 public abstract class ContainerIntegration extends Integration {
 
@@ -42,6 +44,32 @@ public abstract class ContainerIntegration extends Integration {
         }).findFirst().orElse(null);
     }
 
+    @Nullable
+    public static ContainerIntegration getContainerIntegration(@NotNull Block block) {
+        for (ContainerIntegration integration : list()) {
+            if (!integration.isContainer(block)) continue;
+            return integration;
+        }
+        return null;
+    }
+
+    public static boolean isContainerBlock(@NotNull Block block) {
+        for (ContainerIntegration integration : list()) {
+            if (!integration.isContainer(block)) continue;
+            return true;
+        }
+        return false;
+    }
+
+    @NotNull
+    public static List<ItemStack> getContainerItems(@NotNull Block block) {
+        for (ContainerIntegration integration : list()) {
+            if (!integration.isContainer(block)) continue;
+            return integration.getContents(block);
+        }
+        return new ArrayList<>();
+    }
+
     public ContainerIntegration(String name) {
         super(name, IntegrationType.CONTAINER);
     }
@@ -49,5 +77,5 @@ public abstract class ContainerIntegration extends Integration {
     public abstract boolean isContainer(@NotNull Block block);
 
     @NotNull
-    public abstract List<ItemStack> getContents(@NotNull ItemStack item);
+    public abstract List<ItemStack> getContents(@NotNull Block block);
 }
