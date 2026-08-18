@@ -202,13 +202,13 @@ public class IntegrationManager {
         for (List<? extends Integration> list : registeredIntegrations.values()) {
             for (Iterator<? extends Integration> it = list.iterator(); it.hasNext(); ) {
                 Integration integration = it.next();
-                integration.disable();
                 // don't remove third party hooks as they are controlled externally
                 if (!integration.isBuiltin()) continue;
+                integration.disable();
                 it.remove();
             }
         }
-        registeredIntegrations.clear();
+        registeredIntegrations.entrySet().removeIf(entry -> entry.getValue().isEmpty());
     }
 
     private static void printLoaded() {
